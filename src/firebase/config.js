@@ -13,6 +13,10 @@ const {
     NEXT_PUBLIC_VITE_APP_ID
 } = getEnvironments();
 
+const env = getEnvironments();
+
+console.log(env)
+
 const firebaseConfig = {
     apiKey: NEXT_PUBLIC_VITE_API_KEY,
     authDomain: NEXT_PUBLIC_VITE_AUTH_DOMAIN,
