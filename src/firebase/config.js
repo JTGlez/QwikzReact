@@ -15,7 +15,7 @@ const {
 
 const env = getEnvironments();
 
-console.log(env)
+console.log('Las env', env)
 
 const firebaseConfig = {
     apiKey: NEXT_PUBLIC_VITE_API_KEY,
