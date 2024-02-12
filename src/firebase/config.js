@@ -5,12 +5,12 @@ import { getFirestore } from 'firebase/firestore/lite'
 import { getEnvironments } from "../helpers";
 
 const {
-    VITE_VERCEL_API_KEY,
-    VITE_VERCEL_AUTH_DOMAIN,
-    VITE_VERCEL_PROJECT_ID,
-    VITE_VERCEL_STORAGE_BUCKET,
-    VITE_VERCEL_MESSAGING_SENDER_ID,
-    VITE_VERCEL_APP_ID
+    VITE_API_KEY,
+    VITE_AUTH_DOMAIN,
+    VITE_PROJECT_ID,
+    VITE_STORAGE_BUCKET,
+    VITE_MESSAGING_SENDER_ID,
+    VITE_APP_ID
 } = getEnvironments();
 
 const env = getEnvironments();
@@ -18,13 +18,13 @@ const env = getEnvironments();
 console.log('Las env', env)
 
 const firebaseConfig = {
-    apiKey: VITE_VERCEL_API_KEY,
-    authDomain: VITE_VERCEL_AUTH_DOMAIN,
-    projectId: VITE_VERCEL_PROJECT_ID,
-    storageBucket: VITE_VERCEL_STORAGE_BUCKET,
-    messagingSenderId: VITE_VERCEL_MESSAGING_SENDER_ID,
-    appId: VITE_VERCEL_APP_ID
-};
+    apiKey: VITE_API_KEY,
+    authDomain: VITE_AUTH_DOMAIN,
+    projectId: VITE_PROJECT_ID,
+    storageBucket: VITE_STORAGE_BUCKET,
+    messagingSenderId: VITE_MESSAGING_SENDER_ID,
+    appId: VITE_APP_ID
+}
 
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
