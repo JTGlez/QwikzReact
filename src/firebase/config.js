@@ -13,10 +13,6 @@ const {
     VITE_APP_ID
 } = getEnvironments();
 
-const env = getEnvironments();
-
-console.log('Las env', env)
-
 const firebaseConfig = {
     apiKey: VITE_API_KEY,
     authDomain: VITE_AUTH_DOMAIN,
