@@ -6,11 +6,11 @@ export const teachersSlice = createSlice({
         isSavingGroup: false,
         groups: [],
         activeGroup: null,
-        messageSaved: ''
+        messageSaved: '',
+        errorMessage: '',
 
         /*
         activeGroup: {
-            groupId: '123',
             groupName: 'Math',
             groupCode: 'G123',
             acccessToken: '123456',
@@ -25,9 +25,13 @@ export const teachersSlice = createSlice({
         addNewGroup: (state, action) => {
             state.groups.push(action.payload);
             state.isSavingGroup = false;
+            state.messageSaved = `${action.payload.groupCode} creado de forma exitosa!`;
         },
         setActiveGroup: (state, action) => {
             state.activeGroup = action.payload;
+        },
+        setGroups: (state, action) => {
+            state.groups = action.payload;
         },
         updateGroup: (state, action) => {
             for (let index = 0; index < state.groups.length; index++) {
@@ -37,8 +41,11 @@ export const teachersSlice = createSlice({
             }
 
             state.messageSaved = `${action.payload.groupCode} updated successfully!`;
-        }
+        },
+        clearMessageSaved: (state) => {
+            state.messageSaved = '';
+        },
     }
 });
 // Action creators
-export const { increment } = teachersSlice.actions;
+export const { savingNewGroup, addNewGroup, setActiveGroup, setGroups, updateGroup, clearMessageSaved } = teachersSlice.actions;

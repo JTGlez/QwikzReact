@@ -2,16 +2,23 @@
 
 import { useDispatch, useSelector } from "react-redux"
 import { TeachersLayout } from "../layout/TeachersLayout"
+import { ActiveGroupView } from "../views/ActiveGroupView";
+import { NoActiveGroupView } from "../views/NoActiveGroupView";
 
 export const TeachersPage = () => {
 
     const dispatch = useDispatch();
-    const { isSaving, active } = useSelector(state => state.teachers);
-
+    const { isSaving, activeGroup } = useSelector(state => state.teachers);
 
     return (
         <TeachersLayout>
-            <h1>Hola Teacher!</h1>
+
+            {
+                activeGroup
+                    ? <ActiveGroupView />
+                    : <NoActiveGroupView />
+            }
+
         </TeachersLayout>
     )
 }

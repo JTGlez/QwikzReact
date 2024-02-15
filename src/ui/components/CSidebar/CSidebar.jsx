@@ -1,25 +1,26 @@
 import { useSelector } from 'react-redux';
 import { Sidebar } from 'flowbite-react';
-import { UserIcon, GraduationCapIcon, FileQuestionIcon } from 'lucide-react';
+import { Divider } from '@tremor/react';
+import { HiInbox, HiTable, HiUser } from 'react-icons/hi';
 
 export const CSideBar = () => {
 
     const { accountType } = useSelector(state => state.auth);
-
-    console.log(accountType)
 
     if (accountType === 'student') {
         return (
             <Sidebar>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
-                        <Sidebar.Item href="#" icon={UserIcon} >
+                        <Sidebar.Item href="/" icon={HiUser} >
                             <span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Principal</span>
                         </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={GraduationCapIcon}>
-                            <span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Grupos</span>
+                        <Divider></Divider>
+                        <Sidebar.Item href="#" icon={HiTable}>
+                            <span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Grupos</span>
                         </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={FileQuestionIcon}>
+                        <Divider></Divider>
+                        <Sidebar.Item href="#" icon={HiInbox}>
                             <span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Cuestionarios</span>
                         </Sidebar.Item>
                     </Sidebar.ItemGroup>
@@ -34,17 +35,19 @@ export const CSideBar = () => {
             <Sidebar>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup>
-                        <Sidebar.Item href="#" icon={UserIcon} >
+                        <Sidebar.Item href="/" icon={HiUser} >
                             <span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Principal</span>
                         </Sidebar.Item>
-                        <Sidebar.Collapse icon={GraduationCapIcon} label={"Grupos"} className='text-center text-tremor-title font-semibold text-tremor-content-strong'>
-                            <Sidebar.Item href="#"><span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Crear Grupos</span></Sidebar.Item>
-                            <Sidebar.Item href="#"><span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Modificar Grupos</span></Sidebar.Item>
-                            <Sidebar.Item href="#"><span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Eliminar Grupos</span></Sidebar.Item>
+                        <Divider></Divider>
+                        <Sidebar.Collapse icon={HiTable} label={"Grupos"} className='text-center text-tremor-title font-semibold text-tremor-content-strong'>
+                            <Sidebar.Item href="#"><span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Crear</span></Sidebar.Item>
+                            <Sidebar.Item href="#"><span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Modificar</span></Sidebar.Item>
+                            <Sidebar.Item href="#"><span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Eliminar</span></Sidebar.Item>
                         </Sidebar.Collapse>
-                        <Sidebar.Collapse icon={FileQuestionIcon} label={"Cuestionarios"} className='text-center text-tremor-title font-semibold text-tremor-content-strong'>
-                            <Sidebar.Item href="#"><span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Crear Cuestionario</span></Sidebar.Item>
-                            <Sidebar.Item href="#"><span className='text-center text-tremor-title font-semibold text-tremor-content-strong'>Eliminar Cuestionario</span></Sidebar.Item>
+                        <Divider></Divider>
+                        <Sidebar.Collapse icon={HiInbox} label={"Cuestionarios"} className='text-center text-tremor-title font-semibold text-tremor-content-strong'>
+                            <Sidebar.Item href="#"><span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Crear</span></Sidebar.Item>
+                            <Sidebar.Item href="#"><span className='text-center text-tremor-subtitle font-semibold text-tremor-content-strong'>Eliminar</span></Sidebar.Item>
                         </Sidebar.Collapse>
                     </Sidebar.ItemGroup>
                 </Sidebar.Items>

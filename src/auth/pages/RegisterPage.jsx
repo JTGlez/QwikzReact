@@ -58,8 +58,6 @@ export const RegisterPage = () => {
         }
     }, [password, confirmPassword]);
 
-    console.log(accountType)
-
     return (
         <>
             <Divider className='cursor-pointer transition ease-in-out text-gray-500 hover:text-gray-900' onClick={() => setisRegisterOpen(true)}>or Register Here!</Divider>

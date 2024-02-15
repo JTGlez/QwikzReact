@@ -1,9 +1,22 @@
+/* eslint-disable no-unused-vars */
+import { useDispatch, useSelector } from "react-redux"
 import { StudentsLayout } from "../layout/StudentsLayout"
+import { ActiveStudentGroupView } from "../views/ActiveStudentGroupView";
+import { NoActiveStudentGroupView } from "../views/NoActiveStudentGroupView";
 
 export const StudentsPage = () => {
+
+    const { isSaving, activeGroup } = useSelector(state => state.students);
+
+    console.log(activeGroup)
+
     return (
         <StudentsLayout>
-            <h1>Hola!</h1>
+            {
+                activeGroup
+                    ? <ActiveStudentGroupView />
+                    : <NoActiveStudentGroupView />
+            }
         </StudentsLayout>
     )
 }

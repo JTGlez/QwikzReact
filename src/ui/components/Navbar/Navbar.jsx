@@ -1,10 +1,15 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Dropdown } from 'flowbite-react';
 import { Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@tremor/react";
+import { Dialog, DialogPanel, Button } from "@tremor/react"
+import { Button as FlowButton } from "flowbite-react";
 import { startLogout } from "../../../store/auth";
+import { RiAddCircleLine } from "@remixicon/react";
+import CreateGroup from "../../../teachers/components/CreateGroup/CreateGroup";
+import AddGroup from "../../../students/components/AddGroup/AddGroup";
 
 const menus = [
     { title: 'Inicio', path: "students" },
@@ -26,9 +31,13 @@ const Navbar = () => {
 
     const [isClicked, setIsClicked] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
     // Load profile picture, name, and email from the store and dispatch for the logout action
-    const { photoURL, displayName, email } = useSelector(state => state.auth);
+    const { photoURL, displayName, email, accountType } = useSelector(state => state.auth);
+    const { messageSaved } = useSelector(state => state.teachers);
+    const { messageSaved: messageSavedStudent } = useSelector(state => state.students);
     const dispatch = useDispatch();
 
     const toggleUserMenu = () => {
@@ -39,8 +48,48 @@ const Navbar = () => {
         dispatch(startLogout());
     }
 
+    useEffect(() => {
+        if (messageSaved || messageSavedStudent) {
+            // Si hay un mensaje de éxito, cierra el diálogo de creación de grupo
+            setIsAddOpen(false);
+
+            // Abre el diálogo de confirmación
+            setIsConfirmationOpen(true);
+        }
+    }, [messageSaved, messageSavedStudent]);
+
     return (
         <>
+            {/* Diálogo de creación de grupo */}
+            <Dialog open={isAddOpen} onClose={() => setIsAddOpen(false)} static={true}>
+                <DialogPanel>
+                    {accountType === "teacher" ? (
+                        <CreateGroup />
+                    ) : (
+                        <AddGroup />
+                    )}
+                </DialogPanel>
+            </Dialog>
+
+            {/* Diálogo de confirmación */}
+            <Dialog open={isConfirmationOpen} onClose={() => setIsConfirmationOpen(false)} static={true}>
+                <DialogPanel>
+                    {
+                        accountType === "teacher" ? (
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <h2 className="text-2xl font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">{messageSaved}</h2>
+                                <Button variant="primary" color="blue" onClick={() => setIsConfirmationOpen(false)}>Aceptar</Button>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <h2 className="text-2xl font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">{messageSavedStudent}</h2>
+                                <Button variant="primary" color="blue" onClick={() => setIsConfirmationOpen(false)}>Aceptar</Button>
+                            </div>
+                        )
+                    }
+                </DialogPanel>
+            </Dialog>
+
             <nav className="bg-neutral-50 border-x-gray-200 border-b relative">
                 <div className="flex items-center justify-between md:px-8 p-4  ">
                     {/* Logo */}
@@ -54,6 +103,18 @@ const Navbar = () => {
 
                         {/* Menu */}
                         <div className="flex items-center gap-5 flex-row">
+
+                            <FlowButton
+                                outline
+                                pill
+                                variant="primary"
+                                color="white"
+                                size="sm"
+                                onClick={() => setIsAddOpen(true)}
+                            >
+                                <RiAddCircleLine />
+                            </FlowButton>
+
                             <div className={`hidden md:flex md:space-x-6 ${isClicked ? "block" : "hidden"}`}>
                                 {menus.map((menu, index) => (
                                     <a
@@ -76,7 +137,7 @@ const Navbar = () => {
                         </div>
 
                         <Dropdown
-                            className="hidden md:block mt-2"
+                            className="hidden md:block mt-2 z-50 bg-slate-50"
                             label={<Avatar alt="Profile pic" img={photoURL ? photoURL : ""} className="hidden md:block rounded-full" rounded />}
                             arrowIcon={false}
                             inline

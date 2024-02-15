@@ -46,8 +46,6 @@ export const LoginPage = () => {
         dispatch(startGoogleSignIn());
     }
 
-    console.log(isFormValid)
-
     return (
         <AuthLayout>
             <form
