@@ -57,7 +57,7 @@ const Navbar = () => {
                             <div className={`hidden md:flex md:space-x-6 ${isClicked ? "block" : "hidden"}`}>
                                 {menus.map((menu, index) => (
                                     <a
-                                        className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-gradient-to-r after:from-[#5EA2EF] after:to-[#0072F5] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition after:duration-300 after:origin-left"
+                                        className="text-center text-tremor-subtitle font-semibold text-tremor-content-strong relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-gradient-to-r after:from-[#5EA2EF] after:to-[#0072F5] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition after:duration-300 after:origin-left"
                                         key={index}
                                         href={`/${menu.path}`}
                                     >
@@ -76,7 +76,7 @@ const Navbar = () => {
                         </div>
 
                         <Dropdown
-                            className="hidden md:block"
+                            className="hidden md:block mt-2"
                             label={<Avatar alt="Profile pic" img={photoURL ? photoURL : ""} className="hidden md:block rounded-full" rounded />}
                             arrowIcon={false}
                             inline

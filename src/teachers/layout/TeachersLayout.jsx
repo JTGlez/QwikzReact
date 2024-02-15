@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Card } from "@tremor/react"
-import { CSideBar } from "../../ui/components/CSidebar/CSidebar"
 import Navbar from "../../ui/components/Navbar/Navbar"
+import { CSideBar } from "../../ui/components/CSidebar/CSidebar"
 
-export const StudentsLayout = ({ children }) => {
+export const TeachersLayout = ({ children }) => {
     return (
         <>
             <Navbar />

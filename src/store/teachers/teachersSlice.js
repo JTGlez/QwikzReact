@@ -3,17 +3,41 @@ import { createSlice } from '@reduxjs/toolkit';
 export const teachersSlice = createSlice({
     name: 'teachers',
     initialState: {
-        counter: 10
+        isSavingGroup: false,
+        groups: [],
+        activeGroup: null,
+        messageSaved: ''
+
+        /*
+        activeGroup: {
+            groupId: '123',
+            groupName: 'Math',
+            groupCode: 'G123',
+            acccessToken: '123456',
+        },
+
+         */
     },
     reducers: {
-        increment: (state, /* action */ ) => {
-            //! https://react-redux.js.org/tutorials/quick-start 
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
-            state.counter += 1;
+        savingNewGroup: (state) => {
+            state.isSavingGroup = true;
         },
+        addNewGroup: (state, action) => {
+            state.groups.push(action.payload);
+            state.isSavingGroup = false;
+        },
+        setActiveGroup: (state, action) => {
+            state.activeGroup = action.payload;
+        },
+        updateGroup: (state, action) => {
+            for (let index = 0; index < state.groups.length; index++) {
+                if (state.groups[index].id === action.payload.id) {
+                    state.groups[index] = action.payload;
+                }
+            }
+
+            state.messageSaved = `${action.payload.groupCode} updated successfully!`;
+        }
     }
 });
 // Action creators

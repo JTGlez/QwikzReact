@@ -1,0 +1,1 @@
+export { default as QwikzLogo } from './qwikzlogo.png';

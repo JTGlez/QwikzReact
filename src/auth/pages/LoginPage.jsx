@@ -8,7 +8,6 @@ import { useForm } from "../../hooks";
 import { AuthLayout } from "../layout/AuthLayout";
 import { RegisterPage } from "./RegisterPage";
 
-
 // We declare the initialForm outside the component to avoid an infinite loop on the useEffect that regenerates the form 
 const initialForm = {
     email: '',
@@ -22,14 +21,13 @@ export const LoginPage = () => {
 
     // Redux hooks to dispatch actions and get the auth state from the store
     const dispatch = useDispatch();
-    const { status, errorMessage } = useSelector(state => state.auth);
 
     const formRules = {
         email: [(value) => value.includes('@'), 'Email should have an @'],
         password: [(value) => value.length >= 6, 'Password must have min 6 characters']
     }
 
-    const { email, password, formState, isFormValid, emailValid, passwordValid, onInputChange } = useForm(initialForm, formRules);
+    const { email, password, formState, isFormValid, onInputChange } = useForm(initialForm, formRules);
 
     // Auth with email and password
     const onSubmit = (event) => {
@@ -100,14 +98,14 @@ export const LoginPage = () => {
                     Sign in
                 </Button>
             </form>
-            <Button
+            {/* <Button
                 variant="secondary"
                 className="mt-4 w-full"
                 onClick={onGoogleSignIn}
                 icon={RiGoogleFill}
             >
                 Sign in with Google
-            </Button>
+            </Button> */}
             <RegisterPage />
         </AuthLayout>
     )

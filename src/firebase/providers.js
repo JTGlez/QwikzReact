@@ -41,12 +41,11 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
         // Get the custom token from the Flask backend
         const customToken = flaskResp.data.customToken;
 
-        // Sign in with the custom token
+        // Sign in with the custom token from the Flask backend (Using a nested try-catch block)
         try {
 
             const resp = await signInWithCustomToken(firebaseAuth, customToken);
-            console.log(resp)
-            // After creating the user and signing in, we can update their profile.
+            // After creating the user and signing in, we can update his profile.
             await updateProfile(firebaseAuth.currentUser, { displayName });
 
         } catch (error) {
@@ -65,6 +64,7 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
 }
 
 export const signInWithEmailPassword = async ({ email, password }) => {
+
     try {
         const resp = await signInWithEmailAndPassword(firebaseAuth, email, password);
         const { uid, photoURL, displayName } = resp.user;
@@ -75,6 +75,28 @@ export const signInWithEmailPassword = async ({ email, password }) => {
         // Get the custom claims after reloading user info
         const { claims } = await getIdTokenResult(firebaseAuth.currentUser, true)
         const accountType = claims.accountType;
+
+        // Retrieves the user's token to send it to the Flask backend
+        const token = await getCurrentUserToken();
+
+        // Verify if the user has the declared custom claims sending a request validation to the Flask backend
+        const flaskResp = await api.post(`/auth/verify`, {
+            accountType,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token.token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+
+        // The accountType in the client and the accountType in the Flask backend must match
+        if (flaskResp.data.ok === false) {
+            await signOut(firebaseAuth);
+            return {
+                ok: false,
+                errorMessage: flaskResp.data.errorMessage
+            }
+        }
 
         return {
             ok: true,
