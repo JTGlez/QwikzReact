@@ -29,20 +29,20 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
         const token = await getCurrentUserToken();
 
         // Calls the Flask-Axios backend to register the user and set their custom claims using the token
-        const flaskResp = await api.post('/auth/register', {
+/*         const flaskResp = await api.post('/auth/register', {
             accountType
         }, {
             headers: {
                 'Authorization': `Bearer ${token.token}`,
                 'Content-Type': 'application/json',
             }
-        });
+        }); */
 
         // Get the custom token from the Flask backend
-        const customToken = flaskResp.data.customToken;
+        // const customToken = flaskResp.data.customToken;
 
         // Sign in with the custom token from the Flask backend (Using a nested try-catch block)
-        try {
+/*         try {
 
             const resp = await signInWithCustomToken(firebaseAuth, customToken);
             // After creating the user and signing in, we can update his profile.
@@ -50,7 +50,7 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
 
         } catch (error) {
             console.error('Error signing in with custom token:', error);
-        }
+        } */
 
         return {
             ok: true,
