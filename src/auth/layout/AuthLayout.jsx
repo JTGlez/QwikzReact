@@ -1,27 +1,21 @@
 /* eslint-disable react/prop-types */
-import { Card } from "@tremor/react"
-import { QwikzLogo } from "../../assets/img";
+
+import { ThemeProvider } from '@/components/theme-provider'
+import Header from "@/components/ui/header";
 
 export const AuthLayout = ({ children }) => {
   return (
-    <>
-      <Card className='flex justify-center items-center min-h-screen bg-slate-100'>
-        <section className='bg-gray-100 p-20 rounded shadow-md min-w-[320px] sm:min-w-[512px] lg:min-w-[620px]'>
-          <div className="flex items-center flex-col justify-center lg:px-6 ">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <img
-                src={QwikzLogo}
-                alt="Qwikz"
-                className="w-40 h-40 mx-auto"
-              />
-              <h3 className="text-center text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                Log in to Qwikz!
-              </h3>
-              {children}
-            </div>
-          </div>
-        </section>
-      </Card>
-    </>
+
+    <div
+      className='flex flex-col min-h-screen font-sans antialiased bg-transparent'
+    >
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <div className='absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] dark:bg-[size:20px_20px]'>
+          <div className='absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]'></div>
+        </div>
+        <Header />
+        {children}
+      </ThemeProvider>
+    </div>
   )
 }

@@ -29,7 +29,7 @@ export const AppRouter = () => {
             }
 
             {/* If not authenticated, every route will redirect to the login */}
-            <Route path='/*' element={<Navigate to='auth/*' />} />
+            <Route path='/*' element={<Navigate to='auth/' />} />
 
         </Routes>
     )
