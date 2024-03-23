@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { Link } from 'react-router-dom';
 import {
     Card,
     CardContent,
@@ -28,7 +29,7 @@ export const RegisterPage = () => {
                         </CardContent>
                         <CardFooter className='flex justify-center'>
                             <Button asChild variant='link'>
-                                <a href={'/auth/login'}>Already have an account?</a>
+                                <Link to='/auth/login'>Already have an account?</Link>
                             </Button>
                         </CardFooter>
                     </Card>

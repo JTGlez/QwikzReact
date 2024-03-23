@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { TextInput, Button } from "@tremor/react";
 import { RiGoogleFill } from "@remixicon/react/";
+import { Link } from 'react-router-dom';
 import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth"
 import { useForm } from "../../hooks";
 import { AuthLayout } from "../layout/AuthLayout";
@@ -73,7 +74,7 @@ export const LoginPage = () => {
                         </CardContent>
                         <CardFooter className='flex justify-center'>
                             <ShadButton asChild variant='link'>
-                                <a href={'/auth/register'}>Dont have an account?</a>
+                                <Link to='/auth/register'>Dont have an account?</Link>
                             </ShadButton>
                         </CardFooter>
                     </Card>

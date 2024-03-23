@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { AuthLayout } from "../layout/AuthLayout"
 import { Button } from "@/components/ui/button"
 
@@ -18,7 +19,7 @@ export const HomePage = () => {
                                 </span>
                             </h4>
                             <Button size='lg' className='mt-6'>
-                                <a href='/signup'>Get Started</a>
+                                <Link to='/auth/register'>Get Started</Link>
                             </Button>
                         </div>
                         <img
@@ -31,8 +32,6 @@ export const HomePage = () => {
                     </div>
                 </div>
             </main>
-
-
         </AuthLayout>
     )
 }
