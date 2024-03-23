@@ -8,6 +8,8 @@ import { api } from "../../api";
 
 export const startCreatingUserWithEmailPassword = (displayName, email, password, accountType) => {
 
+    console.log()
+
     return async (dispatch) => {
         dispatch(checkingCredentials());
 
@@ -27,7 +29,9 @@ export const startCreatingUserWithEmailPassword = (displayName, email, password,
     }
 }
 
-export const startLoginWithEmailPassword = ({ email, password }) => {
+export const startLoginWithEmailPassword = (email, password ) => {
+
+    console.log(email, password)
 
     return async (dispatch) => {
 

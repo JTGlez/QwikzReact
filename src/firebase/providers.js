@@ -80,23 +80,23 @@ export const signInWithEmailPassword = async ({ email, password }) => {
         const token = await getCurrentUserToken();
 
         // Verify if the user has the declared custom claims sending a request validation to the Flask backend
-        const flaskResp = await api.post(`/auth/verify`, {
-            accountType,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token.token}`,
-                'Content-Type': 'application/json',
-            }
-        })
-
-        // The accountType in the client and the accountType in the Flask backend must match
-        if (flaskResp.data.ok === false) {
-            await signOut(firebaseAuth);
-            return {
-                ok: false,
-                errorMessage: flaskResp.data.errorMessage
-            }
-        }
+        /*         const flaskResp = await api.post(`/auth/verify`, {
+                    accountType,
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token.token}`,
+                        'Content-Type': 'application/json',
+                    }
+                })
+        
+                // The accountType in the client and the accountType in the Flask backend must match
+                if (flaskResp.data.ok === false) {
+                    await signOut(firebaseAuth);
+                    return {
+                        ok: false,
+                        errorMessage: flaskResp.data.errorMessage
+                    }
+                } */
 
         return {
             ok: true,

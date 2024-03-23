@@ -8,13 +8,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { AuthLayout } from "../layout/AuthLayout"
 import { Button } from '@/components/ui/button'
 import RegisterForm from '@/components/ui/register-form'
+
 export const RegisterPage = () => {
 
     return (
-        <AuthLayout>
             <section className='flex-1 flex'>
                 <div className='container mx-auto mt-4 flex items-center justify-center'>
                     <Card className='w-[350px]'>
@@ -35,6 +34,5 @@ export const RegisterPage = () => {
                     </Card>
                 </div>
             </section>
-        </AuthLayout>
     )
 }

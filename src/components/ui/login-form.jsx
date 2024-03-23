@@ -38,10 +38,9 @@ export default function LoginForm() {
 
     function onSubmit(values) {
         const { email, password } = values;
-        console.log(email, password)
 
         // Send user and password to login with Firebase
-        dispatch(startLoginWithEmailPassword(values));
+        dispatch(startLoginWithEmailPassword(email, password));
     }
 
     return (

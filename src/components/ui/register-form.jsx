@@ -2,6 +2,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { startCreatingUserWithEmailPassword } from '@/store/auth'
 
 const formSchema = z.object({
     name: z.string().min(3, { message: 'Name must be at least 3 characters' }),
@@ -34,6 +36,9 @@ const formSchema = z.object({
 
 export default function RegisterForm() {
 
+    // Redux hooks to dispatch actions and get the auth state from the store
+    const dispatch = useDispatch();
+
     const form = useForm({
         defaultValues: {
             name: '',
@@ -46,7 +51,9 @@ export default function RegisterForm() {
 
     function onSubmit(values) {
         const { email, password, confirmPassword, name, accountType } = values;
-        console.log(email, password, confirmPassword, name, accountType);
+        
+        // Send user and password to login with Firebase
+        dispatch(startCreatingUserWithEmailPassword(name, email, password, accountType));
     }
 
     return (
