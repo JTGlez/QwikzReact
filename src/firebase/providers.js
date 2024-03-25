@@ -23,7 +23,12 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
 
         // Register the user with email and password in Firebase
         const resp = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-        const { uid, photoURL } = resp.user;
+        const { user } = resp;
+
+        // Update the user's profile with the displayName
+        await updateProfile(user, { displayName }).catch((error) => {
+            console.error('Error updating user profile:', error);
+        });
 
         // Retrieves the user's token to send it to the Flask backend
         const token = await getCurrentUserToken();
@@ -38,28 +43,31 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
             }
         });
 
-        console.log(flaskResp)
-
         // Get the custom token from the Flask backend
-        // const customToken = flaskResp.data.customToken;
+        const customToken = flaskResp.data.customToken;
 
-        // Sign in with the custom token from the Flask backend (Using a nested try-catch block)
-        /*         try {
-        
-                    const resp = await signInWithCustomToken(firebaseAuth, customToken);
-                    // After creating the user and signing in, we can update his profile.
-                    await updateProfile(firebaseAuth.currentUser, { displayName });
-        
-                } catch (error) {
-                    console.error('Error signing in with custom token:', error);
-                } */
+        try {
+            await signInWithCustomToken(firebaseAuth, customToken);
+
+            // After creating the user and signing in, we can update his profile.
+            await updateProfile(firebaseAuth.currentUser, { displayName });
+
+        } catch (error) {
+            await signOut(firebaseAuth);
+            console.error('Error signing in with custom token:', error);
+        }
 
         return {
             ok: true,
-            uid, photoURL, email, displayName, accountType
+            uid: user.uid,
+            photoURL: user.photoURL,
+            email: user.email,
+            displayName: user.displayName,
+            accountType
         }
 
     } catch (error) {
+        await signOut(firebaseAuth);
         return { ok: false, errorMessage: error.message }
     }
 
@@ -67,45 +75,34 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
 
 export const signInWithEmailPassword = async ({ email, password }) => {
 
-    console.log("Aque llego")
-    console.log(email, password)
-
     try {
-        const resp = await signInWithEmailAndPassword(firebaseAuth, email, password);
-        const { uid, photoURL, displayName } = resp.user;
+        // Send the email and password to Flask API to get the custom token to login
+        const flaskResp = await api.post(`/auth/login`, {
+            email, password
+        });
 
-        // Force reload to get the custom claims
-        await reload(resp.user);
+        if (flaskResp.data.ok === false) {
+            return {
+                ok: false,
+                errorMessage: flaskResp.data.errorMessage
+            }
+        }
 
-        // Get the custom claims after reloading user info
+        const customToken = flaskResp.data.customToken;
+        const resp = await signInWithCustomToken(firebaseAuth, customToken);
+        const { user } = resp;
+
+        // Get the custom claims
         const { claims } = await getIdTokenResult(firebaseAuth.currentUser, true)
         const accountType = claims.accountType;
 
-        // Retrieves the user's token to send it to the Flask backend
-        const token = await getCurrentUserToken();
-
-        // Verify if the user has the declared custom claims sending a request validation to the Flask backend
-        /*         const flaskResp = await api.post(`/auth/verify`, {
-                    accountType,
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${token.token}`,
-                        'Content-Type': 'application/json',
-                    }
-                })
-        
-                // The accountType in the client and the accountType in the Flask backend must match
-                if (flaskResp.data.ok === false) {
-                    await signOut(firebaseAuth);
-                    return {
-                        ok: false,
-                        errorMessage: flaskResp.data.errorMessage
-                    }
-                } */
-
         return {
             ok: true,
-            uid, photoURL, email, displayName, accountType
+            uid: user.uid,
+            photoURL: user.photoURL,
+            email: user.email,
+            displayName: user.displayName,
+            accountType
         }
 
     } catch (error) {
@@ -134,7 +131,6 @@ export const signInWithGoogle = async () => {
         }
 
     } catch (error) {
-
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(error);
@@ -158,7 +154,6 @@ export const signOutApp = async () => {
     } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(error)
 
         return {
             ok: false,

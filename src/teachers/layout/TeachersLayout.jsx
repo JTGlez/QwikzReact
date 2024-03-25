@@ -2,6 +2,9 @@
 import SideNav from "@/components/ui/side-nav"
 
 export const TeachersLayout = ({ children }) => {
+
+    console.log("You are in TeachersLayout.jsx")
+
     return (
         <>
             <div className='flex-1 flex'>

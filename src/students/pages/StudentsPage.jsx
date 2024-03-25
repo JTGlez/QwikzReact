@@ -8,8 +8,6 @@ export const StudentsPage = () => {
 
     const { isSaving, activeGroup } = useSelector(state => state.students);
 
-    console.log(activeGroup)
-
     return (
         <StudentsLayout>
             {

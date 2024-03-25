@@ -5,7 +5,6 @@ export const StudentsRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<StudentsPage />} />
-
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     )
