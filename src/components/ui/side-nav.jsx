@@ -4,6 +4,15 @@ import { HomeIcon, PlusIcon, ExitIcon } from '@radix-ui/react-icons'
 import { Link } from 'react-router-dom'
 import { startLogout } from '@/store/auth'
 import { cleanActiveGroup } from '@/store/students'
+import {
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription
+} from "@/components/ui/dialog"
+import { JoinCode } from './enter-joincode'
 
 // Side navigation for students
 export default function SideNav() {
@@ -12,10 +21,6 @@ export default function SideNav() {
 
 	const onCleanGroup = () => {
 		dispatch(cleanActiveGroup())
-	}
-
-	const onJoinGroup = () => {
-		console.log("Joining a group for students")
 	}
 
 	const onSignOut = () => {
@@ -30,12 +35,23 @@ export default function SideNav() {
 					<span className='hidden md:block'>Home</span>
 				</Link>
 			</Button>
-			<Button asChild variant='ghost' className='md:justify-start'>
-				<Link onClick={onJoinGroup}>
-					<PlusIcon className='h-6 w-6 md:mr-2 md:h5 md:w-5' />
-					<span className='hidden md:block'>Join Group</span>
-				</Link>
-			</Button>
+			<Dialog>
+				<DialogTrigger asChild>
+					<Button variant='ghost' className='md:justify-start'>
+						<PlusIcon className='h-6 w-6 md:mr-2 md:h-5 md:w-5' />
+						<span className='hidden md:block'>Join Group</span>
+					</Button>
+				</DialogTrigger>
+				<DialogContent className="sm:max-w-[425px]">
+					<DialogHeader>
+						<DialogTitle>Join Group</DialogTitle>
+						<DialogDescription>
+							Enter the group code provided by your teacher to join the group.
+						</DialogDescription>
+						<JoinCode />
+					</DialogHeader>
+				</DialogContent>
+			</Dialog>
 			<Button asChild variant='ghost' className='md:justify-start'>
 				<Link onClick={onSignOut}>
 					<ExitIcon className='h-6 w-6 md:mr-2 md:h-5 md:w-5' />
