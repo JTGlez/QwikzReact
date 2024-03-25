@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { savingNewGroup, addNewGroup, setActiveGroup, updateGroup, setGroups } from "./teachersSlice";
+import { savingNewGroup, addNewGroup, setActiveGroup, setGroups } from "./teachersSlice";
 import { api } from "../../api";
 import { getCurrentUserToken } from "../../firebase/providers";
 import { loadGroups } from "../../helpers/loadGroups";
 
 export const startCreatingGroup = (groupName, key) => {
 
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
 
         dispatch(savingNewGroup());
 

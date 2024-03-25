@@ -30,13 +30,30 @@ export const studentsSlice = createSlice({
                     state.groups[index] = action.payload;
                 }
             }
-
             state.messageSaved = `${action.payload.groupCode} updated successfully!`;
         },
         clearMessageSaved: (state) => {
             state.messageSaved = '';
         },
+        cleanActiveGroup: (state) => {
+            state.activeGroup = null;
+        },
+        cleanStudentGroups: (state) => {
+            state.isJoiningGroup = false;
+            state.groups = [];
+            state.activeGroup = null;
+            state.messageSaved = '';
+            state.errorMessage = '';
+        }
     }
 });
 // Action creators
-export const { increment, joiningNewGroup, joinNewGroup, setActiveGroup, setGroups, updateGroup, clearMessageSaved } = studentsSlice.actions;
+export const { 
+    joiningNewGroup, 
+    joinNewGroup, 
+    setActiveGroup, 
+    setGroups, 
+    updateGroup, 
+    clearMessageSaved, 
+    cleanStudentGroups,
+    cleanActiveGroup } = studentsSlice.actions;

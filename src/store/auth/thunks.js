@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { checkingCredentials, login, logout } from "./authSlice";
+import { cleanTeacherGroups } from "../teachers/teachersSlice";
+import { cleanStudentGroups } from "../students/studentsSlice"; 
 import { signInWithGoogle, registerUserWithEmailPassword, signInWithEmailPassword, signOutApp } from "../../firebase/providers";
 import { api } from "../../api";
 
@@ -7,8 +9,6 @@ import { api } from "../../api";
 // A Thunk is a function that returns another function, which receives the dispatch as an argument.
 
 export const startCreatingUserWithEmailPassword = (displayName, email, password, accountType) => {
-
-    console.log()
 
     return async (dispatch) => {
         dispatch(checkingCredentials());
@@ -48,12 +48,11 @@ export const startLoginWithEmailPassword = (email, password ) => {
 
 export const startLogout = () => {
 
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         await signOutApp();
-
-
         dispatch(logout());
-
+        dispatch(cleanTeacherGroups());
+        dispatch(cleanStudentGroups());
     }
 }
 

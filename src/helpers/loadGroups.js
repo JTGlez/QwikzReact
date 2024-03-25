@@ -1,15 +1,13 @@
-import { api } from "../api";
 import { getCurrentUserToken } from "../firebase/providers";
+import { api } from "../api";
 
 export const loadGroups = async () => {
 
-    // Retrieves the user's token to send it to the Flask backend
     const token = await getCurrentUserToken();
     if (!token) throw new Error('No token found');
 
     // Calls the Flask-Axios backend to retrieve the teacher's groups
-    const resp = await api.post('/teachers/groups', {
-
+    const resp = await api.post('/teacher/groups', {
     }, {
         headers: {
             'Authorization': `Bearer ${token.token}`,

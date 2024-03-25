@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux"
-import { GroupCard } from "../components/GroupCard/GroupCard"
+// import { GroupCard } from "../components/GroupCard/GroupCard"
+import GroupCard from "@/components/ui/group-card";
 
 export const NoActiveGroupView = () => {
 
@@ -8,11 +9,16 @@ export const NoActiveGroupView = () => {
     const { groups } = useSelector(state => state.teachers);
 
     return (
-        <section className="grid md:grid-cols-2 gap-6 xl:grid-cols-3 pl-10 pt-10 pr-10">
+		<div className='py-5 px-16'>
+            {
+                groups.map((group, key) => (
+                    <GroupCard key={key} {...group} />
+                ))
+            }
 
-            {groups.map((group, key) => (
+{/*             {groups.map((group, key) => (
                 <GroupCard key={key} {...group} />
-            ))}
-        </section>
+            ))} */}
+        </div>
     )
 }

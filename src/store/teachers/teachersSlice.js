@@ -45,7 +45,25 @@ export const teachersSlice = createSlice({
         clearMessageSaved: (state) => {
             state.messageSaved = '';
         },
+        cleanActiveGroup: (state) => {
+            state.activeGroup = null;
+        },
+        cleanTeacherGroups: (state) => {
+            state.isSavingGroup = false;
+            state.groups = [];
+            state.activeGroup = null;
+            state.messageSaved = '';
+            state.errorMessage = '';
+        }
     }
 });
 // Action creators
-export const { savingNewGroup, addNewGroup, setActiveGroup, setGroups, updateGroup, clearMessageSaved } = teachersSlice.actions;
+export const { 
+    savingNewGroup, 
+    addNewGroup, 
+    setActiveGroup, 
+    setGroups, 
+    updateGroup, 
+    clearMessageSaved, 
+    cleanTeacherGroups,
+    cleanActiveGroup } = teachersSlice.actions;

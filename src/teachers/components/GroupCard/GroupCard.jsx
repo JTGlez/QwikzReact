@@ -27,7 +27,6 @@ export const GroupCard = ({ access_token, group_code, group_name }) => {
         }
     }
 
-
     return (
         <div className="flex flex-col min-h-0 border border-gray-200 rounded-lg dark:border-gray-800">
             <a className="flex-1 min-h-0 overflow-hidden cursor-pointer" onClick={handleGroupClick}>

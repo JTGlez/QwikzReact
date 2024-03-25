@@ -3,11 +3,9 @@ import {
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
     signInWithCustomToken,
-    signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
     updateProfile,
-    reload,
     getIdTokenResult
 } from "firebase/auth";
 import { firebaseAuth } from "./config";
@@ -116,6 +114,7 @@ export const signInWithEmailPassword = async ({ email, password }) => {
     }
 }
 
+// TODO: This provider function needs to be updated to use the Flask API
 export const signInWithGoogle = async () => {
 
     try {

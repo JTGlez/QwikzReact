@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import SideNav from "@/components/ui/side-nav"
+import TeacherSideNav from "@/components/ui/teacher-side-nav"
 
 export const TeachersLayout = ({ children }) => {
 
@@ -9,7 +9,7 @@ export const TeachersLayout = ({ children }) => {
         <>
             <div className='flex-1 flex'>
                 <div className='flex-1 grid grid-cols-[minmax(4rem,_10rem)_minmax(39rem,_1fr)]'>
-                    <SideNav />
+                    <TeacherSideNav />
                     {children}
                 </div>
             </div>
