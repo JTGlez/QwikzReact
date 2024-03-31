@@ -9,7 +9,7 @@ export const NoActiveGroupView = () => {
     const { groups } = useSelector(state => state.teachers);
 
     return (
-		<div className='py-5 px-16'>
+        <div className='py-5 px-16 flex gap-y-2 gap-x-4 flex-wrap'>
             {
                 groups.map((group, key) => (
                     <GroupCard key={key} {...group} />

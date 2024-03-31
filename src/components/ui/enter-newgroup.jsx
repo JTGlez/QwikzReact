@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -13,43 +13,27 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { DialogFooter } from "./dialog"
-import { startAddingGroup } from '@/store/students/thunks'
-
+import { startCreatingGroup } from "@/store/teachers/thunks"
 
 const formSchema = z.object({
-    accessToken: z.string().min(14, { message: 'Invalid access code' }),
+    groupName: z.string()
+        .min(1, { message: 'Invalid group name' }) // Asegúrate de ajustar el mínimo de caracteres según tus necesidades
+        .regex(/^[a-zA-Z0-9\-/\sñáéíóúÁÉÍÓÚ]+$/u, { message: 'Invalid characters in group name' }),
 })
 
-export const JoinCode = ({ closeDialog })  => {
+export const NewGroup = ({ closeDialog }) => {
 
-    // Redux hooks to dispatch actions and get the auth state from the store
     const dispatch = useDispatch();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            accessToken: ''
+            groupName: ''
         },
     })
 
-    const handleInputChange = (event, field) => {
-        let { value } = event.target;
-        value = value
-            .toUpperCase() 
-            .replace(/[^\dA-Z]/g, '') // Delete non-alphanumeric characters
-            .replace(/(.{4})/g, '$1-') // Add a hyphen after every 4 characters
-            .slice(0, 14); // Limit the length to 14 characters (deletes an extra hyphen at the end)
-
-        if (value.endsWith('-') && value.length !== 15) {
-            value = value.slice(0, -1);
-        }
-
-        field.onChange(value); // Actualiza el valor del campo con el formato aplicado
-    };
-
     function onSubmit(values) {
-        console.log("Joining group with access code: ", values.accessToken)
-        dispatch(startAddingGroup(values.accessToken))
+        dispatch(startCreatingGroup(values.groupName))
         closeDialog();
     }
 
@@ -59,16 +43,15 @@ export const JoinCode = ({ closeDialog })  => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6 pt-4'>
                     <FormField
                         control={form.control}
-                        name='accessToken'
+                        name='groupName'
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
                                     <Input
                                         type='text'
                                         {...field}
-                                        onChange={(e) => handleInputChange(e, field)}
-                                        placeholder='XXXX-XXXX-XXXX'
-                                        maxLength={14}
+                                        placeholder='Enter group name...'
+                                        maxLength={50}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -76,7 +59,7 @@ export const JoinCode = ({ closeDialog })  => {
                         )}
                     />
                     <DialogFooter>
-                        <Button type="submit">Join Group</Button>
+                        <Button type="submit">Create Group</Button>
                     </DialogFooter>
                 </form>
             </Form>

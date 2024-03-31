@@ -6,6 +6,8 @@ import { StudentsRoutes } from "../students/routes/StudentsRoutes";
 import { Spinner } from "flowbite-react";
 import { TeacherRoutes } from "../teachers/routes/TeacherRoutes";
 import { GlobalLayout } from "@/layout/GlobalLayout";
+import { Toaster } from "@/components/ui/toaster";
+
 export const AppRouter = () => {
 
     const { status, accountType, verificationDone } = useCheckAuth();
@@ -20,6 +22,7 @@ export const AppRouter = () => {
         );
     }
 
+    // Toaster component is used to show messages to the user
     return (
         <GlobalLayout>
             <Routes>
@@ -34,6 +37,7 @@ export const AppRouter = () => {
                 {/* If not authenticated, every route will redirect to the login */}
                 <Route path='/*' element={<Navigate to='auth/' />} />
             </Routes>
+            <Toaster />
         </GlobalLayout>
     )
 }

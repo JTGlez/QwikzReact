@@ -25,7 +25,7 @@ export const teachersSlice = createSlice({
         addNewGroup: (state, action) => {
             state.groups.push(action.payload);
             state.isSavingGroup = false;
-            state.messageSaved = `${action.payload.groupCode} creado de forma exitosa!`;
+            state.messageSaved = `${action.payload.GROUP_CODE} creado de forma exitosa!`;
         },
         setActiveGroup: (state, action) => {
             state.activeGroup = action.payload;
@@ -40,10 +40,16 @@ export const teachersSlice = createSlice({
                 }
             }
 
-            state.messageSaved = `${action.payload.groupCode} updated successfully!`;
+            state.messageSaved = `${action.payload.GROUP_CODE} updated successfully!`;
+        },
+        setErrorMessage: (state, action) => {
+            state.errorMessage = action.payload;
         },
         clearMessageSaved: (state) => {
             state.messageSaved = '';
+        },
+        clearErrorMessage: (state) => {
+            state.errorMessage = '';
         },
         cleanActiveGroup: (state) => {
             state.activeGroup = null;
@@ -64,6 +70,8 @@ export const {
     setActiveGroup, 
     setGroups, 
     updateGroup, 
-    clearMessageSaved, 
+    setErrorMessage,
+    clearMessageSaved,
+    clearErrorMessage, 
     cleanTeacherGroups,
     cleanActiveGroup } = teachersSlice.actions;

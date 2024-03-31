@@ -8,7 +8,7 @@ export const loadStudentGroups = async () => {
     if (!token) throw new Error('No token found');
 
     // Calls the Flask-Axios backend to retrieve the teacher's groups
-    const resp = await api.post('/students/groups', {
+    const resp = await api.post('/student/groups', {
     }, {
         headers: {
             'Authorization': `Bearer ${token.token}`,

@@ -1,25 +1,40 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Button } from "@tremor/react"
-import { Avatar } from "flowbite-react"
-import { Dialog, DialogPanel, Title } from "@tremor/react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { ChevronRight } from "lucide-react";
+import { Trash } from "lucide-react";
+import { CheckCheckIcon } from "lucide-react";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+import { StudentList } from "@/components/ui/student-list";
+import { Quizzlist } from "@/components/ui/quizzlist";
 
 export const ActiveGroupView = () => {
 
     const dispatch = useDispatch();
     const { isSaving, activeGroup } = useSelector(state => state.teachers);
-    const { access_token, group_code, group_name } = activeGroup;
+    const { ACCESS_TOKEN, GROUP_CODE, GROUP_NAME } = activeGroup;
     const [isRegisterOpen, setisRegisterOpen] = useState(false);
+
+    console.log(activeGroup);
 
     return (
         <>
-            <Dialog open={isRegisterOpen} onClose={() => setisRegisterOpen(false)} static={true}>
-                <DialogPanel>
-                    <Title className="mb-3 text-center">{access_token}</Title>
-                </DialogPanel>
-            </Dialog>
-            <div className="mt-3 grid xl:grid-cols-3 items-start gap-4">
+            <div className="px-4 mt-3 grid xl:grid-cols-3 items-start gap-4">
                 <div className="space-y-4">
                     <Card>
                         <div className="flex items-start gap-4 p-6">
@@ -31,45 +46,117 @@ export const ActiveGroupView = () => {
                                 width="96"
                             />
                             <div className="space-y-2">
-                                <h1 className="text-2xl font-bold">{group_name}</h1>
-                                <p className="text-gray-500 dark:text-gray-400">{group_code}</p>
+                                <h1 className="text-2xl font-bold">{GROUP_NAME}</h1>
+                                <p className="text-gray-500 dark:text-gray-400">{GROUP_CODE}</p>
                             </div>
                         </div>
                         <div className="grid gap-4 p-6">
-                            <Button icon={SchoolIcon} className=" xl:flex xl:w-full" onClick={() => setisRegisterOpen(true)}>
-                                <span>Mostrar código de Invitación</span>
-                            </Button>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline">Código de Invitación</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Mostrar código de Invitación</DialogTitle>
+                                        <DialogDescription>
+                                            Envía el siguiente código a los estudiantes para que puedan unirse al grupo.
+                                        </DialogDescription>
+                                        <div>
+                                            <p className="text-lg font-semibold text-center mt-4 mb-4">{ACCESS_TOKEN}</p>
+                                        </div>
+                                    </DialogHeader>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
+                    </Card>
+                    {/* Here we should display the created quizzes */}
+                    <Card>
+                        <div className="flex items-start gap-4 p-6">
+                            <h2 className="text-xl font-semibold">Cuestionarios</h2>
+                        </div>
+                        <div className="p-6">
+                            <div className="space-y-4">
+                                <section className="flex justify-between">
+                                    <div className="flex items-start gap-4">
+                                        <div className="space-y-2 leading-none">
+                                            <h3 className="font-semibold">Cuestionario 1</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                Examen Parcial 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {/* To execute actions like viewing quizz results or delete the quizz */}
+                                    <div className="flex gap-4">
+                                        <Button variant="secondary" size="icon">
+                                            <CheckCheckIcon className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="destructive" size="icon">
+                                            <Trash className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </section>
+                                <div className="border-t border-gray-200 dark:border-gray-800" />
+                                <div className="flex items-center text-center justify-center">
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline">Ver cuestionarios</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[60rem]">
+                                            <DialogHeader>
+                                                <DialogTitle>Cuestionarios</DialogTitle>
+                                                <DialogDescription>
+                                                    A continuación se muestra la lista de cuestionarios creados para este grupo.
+                                                </DialogDescription>
+                                                <Quizzlist />
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </div>
                         </div>
                     </Card>
                     <Card>
                         <div className="flex items-start gap-4 p-6">
-                            <h2 className="text-xl font-semibold">Cuestionarios</h2>
-                            <Button>
-                                <span>+</span>
-                            </Button>
+                            <h2 className="text-xl font-semibold">Integrantes</h2>
                         </div>
                         <div className="p-6">
                             <div className="space-y-4">
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10">
-                                    </Avatar>
-                                    <div className="space-y-2 leading-none">
-                                        <h3 className="font-semibold">Cuestionario 1</h3>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Examen Parcial 1
-                                        </p>
+                                <section className="flex justify-between">
+                                    <div className="flex items-start gap-4">
+                                        <Avatar>
+                                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                        <div className="space-y-2 leading-none">
+                                            <h3 className="font-semibold">Leonardo Cruz</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                Se unió el 12 de Marzo
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="border-t border-gray-200 dark:border-gray-800" />
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10">
-                                    </Avatar>
-                                    <div className="space-y-2 leading-none">
-                                        <h3 className="font-semibold">Repaso del Tema</h3>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Repaso de los temas vistos en la semana sobre Bases de Datos Relacionales.
-                                        </p>
+                                    {/* To execute actions like viewing quizz results or delete the quizz */}
+                                    <div className="flex gap-4">
+                                        <Button variant="destructive" size="icon">
+                                            <Trash className="h-4 w-4" />
+                                        </Button>
                                     </div>
+                                </section>
+                                <div className="border-t border-gray-200 dark:border-gray-800 flex items-center" />
+                                <div className="flex items-center text-center justify-center">
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline">Ver todos los integrantes</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[100vh]">
+                                            <DialogHeader>
+                                                <DialogTitle>Integrantes del grupo</DialogTitle>
+                                                <DialogDescription>
+                                                    A continuación se muestra la lista de integrantes del grupo.
+                                                </DialogDescription>
+                                                <StudentList />
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
                             </div>
                         </div>
@@ -79,24 +166,19 @@ export const ActiveGroupView = () => {
                     <Card>
                         <div className="flex items-start gap-4 p-6">
                             <h2 className="text-xl font-semibold">Announcements</h2>
-                            {/*                         <Button size="sm">Create</Button>
- */}                    </div>
+                        </div>
                         <div className="p-6">
                             <div className="space-y-4">
                                 <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10">
-                                    </Avatar>
                                     <div className="space-y-2 leading-none">
                                         <h3 className="font-semibold">Bienvenido al grupo!</h3>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Este grupo ha sido creado para la asignatura de {group_name}. Mantente al pendiente de los cuestionarios por publicar.
+                                            Este grupo ha sido creado para la asignatura de {GROUP_NAME}. Mantente al pendiente de los cuestionarios por publicar.
                                         </p>
                                     </div>
                                 </div>
                                 <div className="border-t border-gray-200 dark:border-gray-800" />
                                 <div className="flex items-start gap-4">
-                                    <Avatar className="w-10 h-10">
-                                    </Avatar>
                                     <div className="space-y-2 leading-none">
                                         <h3 className="font-semibold">Homework Reminder</h3>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -107,63 +189,33 @@ export const ActiveGroupView = () => {
                             </div>
                         </div>
                     </Card>
-                    <div className="space-y-4">
-                        <Card>
-                            <div className="p-6">
-                                <h2 className="text-xl font-semibold">Assignments</h2>
-                            </div>
-                            <div className="p-0">
-                                <div className="border-t border-gray-200 dark:border-gray-800" />
-                                <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                                    <li className="flex items-center justify-between p-4 space-y-2">
-                                        <div className="flex-1 min-w-0 space-y-1">
-                                            <h3 className="text-base font-semibold">Midterm Exam: Biology 101</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Available until Mar 15</p>
-                                        </div>
-                                        <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
-                                            View →
-                                        </a>
-                                    </li>
-                                    <li className="flex items-center justify-between p-4 space-y-2">
-                                        <div className="flex-1 min-w-0 space-y-1">
-                                            <h3 className="text-base font-semibold">Lab Report: Photosynthesis</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Available until Mar 22</p>
-                                        </div>
-                                        <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
-                                            View →
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </Card>
-                        <Card>
-                            <div className="p-6">
-                                <h2 className="text-xl font-semibold">Materials</h2>
-                            </div>
-                            <div className="p-0">
-                                <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                                    <li className="flex items-center justify-between p-4 space-y-2">
-                                        <div className="flex-1 min-w-0 space-y-1">
-                                            <h3 className="text-base font-semibold">Syllabus: Biology 101</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Introduction to the course</p>
-                                        </div>
-                                        <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
-                                            Download →
-                                        </a>
-                                    </li>
-                                    <li className="flex items-center justify-between p-4 space-y-2">
-                                        <div className="flex-1 min-w-0 space-y-1">
-                                            <h3 className="text-base font-semibold">Lecture Slides: Cell Structure</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Available until Mar 15</p>
-                                        </div>
-                                        <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
-                                            View →
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </Card>
-                    </div>
+                    <Card>
+                        <div className="p-6">
+                            <h2 className="text-xl font-semibold">Materials</h2>
+                        </div>
+                        <div className="p-0">
+                            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                                <li className="flex items-center justify-between p-4 space-y-2">
+                                    <div className="flex-1 min-w-0 space-y-1">
+                                        <h3 className="text-base font-semibold">Syllabus: Biology 101</h3>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Introduction to the course</p>
+                                    </div>
+                                    <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
+                                        Download →
+                                    </a>
+                                </li>
+                                <li className="flex items-center justify-between p-4 space-y-2">
+                                    <div className="flex-1 min-w-0 space-y-1">
+                                        <h3 className="text-base font-semibold">Lecture Slides: Cell Structure</h3>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Available until Mar 15</p>
+                                    </div>
+                                    <a className="ml-2 flex-shrink-0 text-sm underline" href="#">
+                                        View →
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </Card>
                 </div>
             </div>
         </>

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { GroupCard } from "../../teachers/components/GroupCard/GroupCard";
+import GroupCard from "@/components/ui/group-card";
 
 export const NoActiveStudentGroupView = () => {
 

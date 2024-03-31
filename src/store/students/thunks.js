@@ -15,7 +15,7 @@ export const startAddingGroup = (accessToken) => {
             const token = await getCurrentUserToken();
 
             // Calls the Flask-Axios backend to create the group using the token
-            const resp = await api.post('/students/joingroup', {
+            const resp = await api.post('/student/join_group', {
                 accessToken: accessToken,
             }, {
                 headers: {
@@ -24,8 +24,10 @@ export const startAddingGroup = (accessToken) => {
                 }
             })
 
-            dispatch(joinNewGroup(resp.data.group));
-            dispatch(setActiveGroup(resp.data.group));
+            console.log("Me estoy uniendo", resp.data)
+
+            dispatch(joinNewGroup(resp.data));
+            dispatch(setActiveGroup(resp.data));
 
         } catch (error) {
             return null;
