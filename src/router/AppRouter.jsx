@@ -21,7 +21,7 @@ export const AppRouter = () => {
             </GlobalLayout>
         );
     }
-
+    
     // Toaster component is used to show messages to the user
     return (
         <GlobalLayout>

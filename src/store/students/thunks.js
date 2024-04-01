@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { joinNewGroup, joiningNewGroup, setActiveGroup, updateGroup, setGroups } from "./studentsSlice";
+import { joinNewGroup, joiningNewGroup, setActiveGroup, updateGroup, setGroups, setErrorMessage } from "./studentsSlice";
 import { api } from "../../api";
 import { getCurrentUserToken } from "../../firebase/providers";
 import { loadStudentGroups } from "../../helpers/loadStudentGroups";
@@ -43,6 +43,15 @@ export const startLoadingStudentGroups = () => {
 
         const groups = await loadStudentGroups();
         dispatch(setGroups(groups));
+    }
+
+}
+
+export const startDeletingGroup = (groupId) => {
+
+    return async (dispatch) => {
+
+
     }
 
 }

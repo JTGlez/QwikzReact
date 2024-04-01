@@ -5,9 +5,7 @@ import { getIdTokenResult } from "firebase/auth";
 import { checkingCredentials, login, logout } from "../store/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../firebase/config";
-import { loadGroups } from "../helpers/loadGroups";
 import { startLoadingGroups } from "../store/teachers/thunks";
-import { loadStudentGroups } from "../helpers/loadStudentGroups";
 import { startLoadingStudentGroups } from "../store/students/thunks";
 
 export const useCheckAuth = () => {
@@ -41,12 +39,10 @@ export const useCheckAuth = () => {
             // Then, do something!
             if (accountType === 'teacher') {
                 dispatch(startLoadingGroups());
-                loadGroups();
             }
 
             else if (accountType === 'student') {
                 dispatch(startLoadingStudentGroups());
-                loadStudentGroups();
             }
 
             // After checking, we can go to the router
