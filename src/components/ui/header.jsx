@@ -41,7 +41,6 @@ export default function Header() {
                             </a>
                         </Button>
                         <ModeToggle />
-
                         <Button asChild variant='ghost'>
                             <Link to="/auth/login">
                                 <span>Login</span>
@@ -51,7 +50,6 @@ export default function Header() {
                 </div>
             </header>
         )
-
 
     }
 

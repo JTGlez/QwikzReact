@@ -8,6 +8,16 @@ export const NoActiveGroupView = () => {
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.teachers);
 
+    if (!groups.length) {
+        return (
+            <div className="flex justify-center items-center h-[80vh]">
+                <p className="text-lg font-semibold text-center text-gray-400">
+                    Create an active group to start teaching!
+                </p>
+            </div>
+        )
+    }
+
     return (
         <div className='py-5 px-16 flex gap-y-2 gap-x-4 flex-wrap'>
             {
