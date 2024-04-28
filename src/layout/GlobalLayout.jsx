@@ -1,9 +1,17 @@
 /* eslint-disable react/prop-types */
-
+import { useDispatch } from 'react-redux';
 import { ThemeProvider } from '@/components/theme-provider'
 import Header from "@/components/ui/header";
+import { questions as dummydata } from '@/assets/data';
+import { setQuestions } from '@/store/quizzes';
+
 
 export const GlobalLayout = ({ children }) => {
+
+    // Dummy questions
+    //const dispatch = useDispatch();
+    //dispatch(setQuestions(dummydata));
+
     return (
         <div
             className='flex flex-col font-sans antialiased bg-transparent'
