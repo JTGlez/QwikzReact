@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +22,6 @@ import { Quizzlist } from "@/components/ui/quizzlist";
 
 export const ActiveStudentGroupView = () => {
 
-    const dispatch = useDispatch();
     const { activeGroup } = useSelector(state => state.students);
     const { STUDENTS } = activeGroup;
 
@@ -145,8 +144,8 @@ export const ActiveStudentGroupView = () => {
                                     </div>
                                 </section>
                             ) : (
-                                <div className="flex items-center text-center justify-center">
-                                    <p>No hay estudiantes en el grupo. Invita a nuevos estudiantes.</p> {/* Mensaje alternativo */}
+                                <div className="flex items-center text-center justify-left">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">No hay estudiantes en el grupo. Invita a nuevos estudiantes.</p> {/* Mensaje alternativo */}
                                 </div>
                             )}
 
