@@ -4,6 +4,7 @@ export const teachersSlice = createSlice({
     name: 'teachers',
     initialState: {
         isSavingGroup: false,
+        isSavingQuiz: false,
         groups: [],
         activeGroup: null,
         messageSaved: '',
@@ -22,10 +23,17 @@ export const teachersSlice = createSlice({
         savingNewGroup: (state) => {
             state.isSavingGroup = true;
         },
+        savingNewQuiz: (state) => {
+            state.isSavingQuiz = true;
+        },
         addNewGroup: (state, action) => {
             state.groups.push(action.payload);
             state.isSavingGroup = false;
             state.messageSaved = `${action.payload.GROUP_CODE} creado de forma exitosa!`;
+        },
+        addNewQuiz: (state, action) => {
+            state.isSavingQuiz = false;
+            state.messageSaved = `Quizz ${action.payload.QUIZZ_NAME} creado de forma exitosa!`;
         },
         setActiveGroup: (state, action) => {
             state.activeGroup = action.payload;
@@ -67,7 +75,9 @@ export const teachersSlice = createSlice({
 export const { 
     savingNewGroup, 
     addNewGroup, 
-    setActiveGroup, 
+    setActiveGroup,
+    savingNewQuiz,
+    addNewQuiz, 
     setGroups, 
     updateGroup, 
     setErrorMessage,

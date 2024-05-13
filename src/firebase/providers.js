@@ -33,7 +33,9 @@ export const registerUserWithEmailPassword = async ({ displayName, email, passwo
 
         // Calls the Flask-Axios backend to register the user and set their custom claims using the token
         const flaskResp = await api.post('/auth/register', {
-            accountType
+            accountType,
+            displayName,
+            email
         }, {
             headers: {
                 'Authorization': `Bearer ${token.token}`,

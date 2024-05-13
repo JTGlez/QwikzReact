@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +11,6 @@ import {
     DialogTrigger,
     DialogFooter
 } from "@/components/ui/dialog"
-import { Trash } from "lucide-react";
 import { CheckCheckIcon } from "lucide-react";
 import {
     Avatar,
@@ -22,13 +19,25 @@ import {
 } from "@/components/ui/avatar"
 import { StudentList } from "@/components/ui/student-list";
 import { Quizzlist } from "@/components/ui/quizzlist";
+import { Trash } from "lucide-react";
+import { QuizzList } from "@/components/ui/quizz-list";
 
 export const ActiveStudentGroupView = () => {
 
-    const dispatch = useDispatch();
-    const { isSaving, activeGroup } = useSelector(state => state.students);
-    const { ACCESS_TOKEN, GROUP_CODE, GROUP_NAME } = activeGroup;
-    const [isRegisterOpen, setisRegisterOpen] = useState(false);
+    const { activeGroup } = useSelector(state => state.students);
+    const { STUDENTS, QUIZZES, QWIKZGROUP_ID } = activeGroup;
+
+    // Verificar si hay estudiantes
+    const hasStudents = STUDENTS && STUDENTS.length > 0;
+    const hasQuizzes = QUIZZES && QUIZZES.length > 0;
+
+    // Obtener el primer estudiante si hay estudiantes
+    const firstStudent = hasStudents ? STUDENTS[0] : null;
+    const firstQuizz = hasQuizzes ? QUIZZES[0] : null;
+    const studentName = firstStudent ? firstStudent.STUDENT_DETAILS.DISPLAY_NAME : "Sin estudiantes";
+    const enrollmentDate = firstStudent ? new Date(firstStudent.ENROLLMENT_DATE).toLocaleDateString() : '';
+
+    const { GROUP_CODE, GROUP_NAME } = activeGroup;
 
     const onDeactivateGroup = () => {
         console.log("Deactivating group", activeGroup)
@@ -78,22 +87,30 @@ export const ActiveStudentGroupView = () => {
                     </div>
                     <div className="p-6">
                         <div className="space-y-4">
-                            <section className="flex justify-between">
-                                <div className="flex items-start gap-4">
-                                    <div className="space-y-2 leading-none">
-                                        <h3 className="font-semibold">Cuestionario 1</h3>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Examen Parcial 1
-                                        </p>
+                            {hasQuizzes ? (
+                                <section className="flex justify-between">
+                                    <div className="flex items-start gap-4">
+                                        <div className="space-y-2 leading-none">
+                                            <h3 className="font-semibold">{firstQuizz.QUIZZ_NAME}</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                {/* Aquí podrías agregar detalles adicionales del cuestionario */}
+                                                {firstQuizz.QUIZZ_CODE}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                {/* To execute actions like viewing quizz results or delete the quizz */}
-                                <div className="flex gap-4">
-                                    <Button variant="secondary" size="icon">
-                                        <CheckCheckIcon className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </section>
+                                    {/* To execute actions like viewing quizz results or delete the quizz */}
+                                    <div className="flex gap-4">
+                                        <Button variant="secondary" size="icon">
+                                            <CheckCheckIcon className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="destructive" size="icon">
+                                            <Trash className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </section>
+                            ) : (
+                                <p className="text-sm text-gray-500 dark:text-gray-400">No hay cuestionarios disponibles. Crea uno nuevo.</p>
+                            )}
                             <div className="border-t border-gray-200 dark:border-gray-800" />
                             <div className="flex items-center text-center justify-center">
                                 <Dialog>
@@ -106,7 +123,7 @@ export const ActiveStudentGroupView = () => {
                                             <DialogDescription>
                                                 A continuación se muestra la lista de cuestionarios creados para este grupo.
                                             </DialogDescription>
-                                            <Quizzlist />
+                                            <QuizzList quizzes={QUIZZES} qwikzgroupId={QWIKZGROUP_ID} /> {/* Mostrar lista de estudiantes */}
                                         </DialogHeader>
                                     </DialogContent>
                                 </Dialog>
@@ -120,41 +137,51 @@ export const ActiveStudentGroupView = () => {
                     </div>
                     <div className="p-6">
                         <div className="space-y-4">
-                            <section className="flex justify-between">
-                                <div className="flex items-start gap-4">
-                                    <Avatar>
-                                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    <div className="space-y-2 leading-none">
-                                        <h3 className="font-semibold">Leonardo Cruz</h3>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Se unió el 12 de Marzo
-                                        </p>
+                            {hasStudents ? (
+                                <section className="flex justify-between">
+                                    <div className="flex items-start gap-4">
+                                        <Avatar>
+                                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                        <div className="space-y-2 leading-none">
+                                            <h3 className="font-semibold">{studentName}</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                Se unió el {enrollmentDate} {/* Mostrar la fecha de inscripción */}
+                                            </p>
+                                        </div>
                                     </div>
+                                    <div className="flex gap-4">
+                                        {/* Aquí podrías agregar acciones adicionales */}
+                                    </div>
+                                </section>
+                            ) : (
+                                <div className="flex items-center text-center justify-left">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">No hay estudiantes en el grupo. Invita a nuevos estudiantes.</p> {/* Mensaje alternativo */}
                                 </div>
-                                {/* To execute actions like viewing quizz results or delete the quizz */}
-                                <div className="flex gap-4">
+                            )}
 
-                                </div>
-                            </section>
-                            <div className="border-t border-gray-200 dark:border-gray-800 flex items-center" />
-                            <div className="flex items-center text-center justify-center">
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <Button variant="outline">Ver todos los integrantes</Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[100vh]">
-                                        <DialogHeader>
-                                            <DialogTitle>Integrantes del grupo</DialogTitle>
-                                            <DialogDescription>
-                                                A continuación se muestra la lista de integrantes del grupo.
-                                            </DialogDescription>
-                                            <StudentList />
-                                        </DialogHeader>
-                                    </DialogContent>
-                                </Dialog>
-                            </div>
+                            {hasStudents && (
+                                <>
+                                    <div className="border-t border-gray-200 dark:border-gray-800 flex items-center" />
+                                    <div className="flex items-center text-center justify-center">
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button variant="outline">Ver todos los integrantes</Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="sm:max-w-[100vh]">
+                                                <DialogHeader>
+                                                    <DialogTitle>Integrantes del grupo</DialogTitle>
+                                                    <DialogDescription>
+                                                        A continuación se muestra la lista de integrantes del grupo.
+                                                    </DialogDescription>
+                                                    <StudentList students={STUDENTS} /> {/* Mostrar lista de estudiantes */}
+                                                </DialogHeader>
+                                            </DialogContent>
+                                        </Dialog>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </Card>

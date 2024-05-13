@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { savingNewGroup, addNewGroup, setActiveGroup, setGroups, setErrorMessage } from "./teachersSlice";
+import { savingNewGroup, savingNewQuiz, addNewGroup, setActiveGroup, setGroups, setErrorMessage, addNewQuiz } from "./teachersSlice";
 import { api } from "../../api";
 import { getCurrentUserToken } from "../../firebase/providers";
 import { loadGroups } from "../../helpers/loadGroups";
@@ -49,9 +49,53 @@ export const startCreatingGroup = (groupName) => {
 export const startLoadingGroups = () => {
 
     return async (dispatch) => {
-
         const groups = await loadGroups();
         dispatch(setGroups(groups));
     }
+}
 
+export const startCreatingQuiz = (quizz) => {
+
+    return async (dispatch) => {
+
+        dispatch(savingNewQuiz());
+
+        // Reformatear el objeto quizz para asegurar la estructura correcta
+        const formattedQuizz = {
+            QUIZZ_CODE: quizz.QUIZZ_CODE,
+            QUIZZ_NAME: quizz.QUIZZ_NAME,
+            LIMIT_TIME: quizz.LIMIT_TIME,
+            MAX_RETRY: quizz.MAX_RETRY,
+            QUESTIONS: quizz.QUESTIONS.map(question => ({
+                question: question.question,
+                answers: question.answers,
+                correctAnswer: question.correctAnswer,
+                imageURL: question.imageURL
+            })),
+            QWIKZGROUP_ID: quizz.QWIKZGROUP_ID
+        };
+
+        try {
+            // Retrieves the current user's token to send it to the Flask backend and verify the user's identity
+            const token = await getCurrentUserToken();
+
+            // Calls the Flask-Axios backend to create the quiz using the token
+            const resp = await api.post('/quizz/create', formattedQuizz, {
+                headers: {
+                    'Authorization': `Bearer ${token.token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            // Log the response from the server
+            console.log("Data", resp.data);
+
+            // If the response is successful, dispatch the action to save the message
+            dispatch(addNewQuiz(resp.data));
+
+        } catch (error) {
+            return dispatch(setErrorMessage(error.message));
+        }
+
+    }
 }
