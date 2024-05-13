@@ -92,6 +92,7 @@ const useQuizCreate = ({
         });
         setQuizSubmitting(false);
         onQuizSubmitting(quiz);
+
         console.log(quiz);
         setQuizSubmitted(true);
     }, [quizSubmitting]);
@@ -100,7 +101,9 @@ const useQuizCreate = ({
         if (!quizSubmitted) {
             return;
         }
-        onQuizSubmitted();
+
+        // Execute the callback function
+        onQuizSubmitted(questions);
         setQuizSubmitted(false);
     }, [quizSubmitted]);
 

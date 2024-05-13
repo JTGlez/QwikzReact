@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@/components/ui/button'
 import { useToast } from './use-toast'
-import { HomeIcon, PlusIcon, ExitIcon } from '@radix-ui/react-icons'
+import { HomeIcon, PlusIcon, ExitIcon, ReaderIcon  } from '@radix-ui/react-icons'
 import { Link } from 'react-router-dom'
 import { startLogout } from '@/store/auth'
 import { cleanActiveGroup as cleanActiveGroupTeacher, clearErrorMessage, clearMessageSaved } from '@/store/teachers'
@@ -16,12 +16,15 @@ import {
     DialogDescription
 } from "@/components/ui/dialog"
 import { NewGroup } from './enter-newgroup'
+import AddQuiz from '@/teachers/components/AddQuiz'
+import { startCreatingQuiz } from '@/store/teachers/thunks'
 
 // Side navigation for teachers
 export default function TeacherSideNav() {
 
     const { messageSaved, errorMessage } = useSelector(state => state.teachers);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [quizDialogOpen, setQuizDialogOpen] = useState(false);
     const dispatch = useDispatch();
     const { toast } = useToast()
 
@@ -33,6 +36,12 @@ export default function TeacherSideNav() {
 
     const onSignOut = () => {
         dispatch(startLogout());
+    }
+
+    const onQuizSubmitted = (questions) => {
+        console.log("Esto recibo", questions)
+        dispatch(startCreatingQuiz(questions));
+        setQuizDialogOpen(false);
     }
 
     // Display a confirmation toast when the group is created or an error message
@@ -79,6 +88,23 @@ export default function TeacherSideNav() {
                     </DialogHeader>
                 </DialogContent>
             </Dialog>
+            <Dialog open={quizDialogOpen} onOpenChange={setQuizDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant='ghost' className='md:justify-start'>
+                        <ReaderIcon className='h-6 w-6 md:mr-2 md:h-5 md:w-5' />
+                        <span className='hidden md:block'>Create Quizz</span>
+                    </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[60rem]">
+                        <DialogHeader>
+                            <DialogTitle>Nuevo Cuestionario</DialogTitle>
+                            <DialogDescription>
+                                A continuación puede crear un nuevo cuestionario
+                            </DialogDescription>
+                            <AddQuiz onQuizSubmitted={onQuizSubmitted}/>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
             <Button asChild variant='ghost' className='md:justify-start'>
                 <Link onClick={onSignOut}>
                     <ExitIcon className='h-6 w-6 md:mr-2 md:h-5 md:w-5' />
