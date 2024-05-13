@@ -37,3 +37,35 @@ export const startQuizz = (quizzId, qwikzgroupId) => {
     }
 
 }
+
+export const queryQuizzResults = (quizzId) => {
+    
+        return async (dispatch) => {
+    
+            try {
+    
+                // Retrieves the current user's token to send it to the Flask backend and verify the user's identity
+                const token = await getCurrentUserToken();
+    
+                const queryQuizz = {
+                    QUIZZ_ID: quizzId
+                }
+    
+                const resp = await api.post('/quizz/get_quizz_results', {
+                    QUIZZ_ID: quizzId
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token.token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                return resp.data;
+    
+            } catch (error) {
+                // return dispatch(setErrorMessage(error.message));
+            }
+    
+        }
+    
+    }

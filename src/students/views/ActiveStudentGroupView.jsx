@@ -43,6 +43,8 @@ export const ActiveStudentGroupView = () => {
         console.log("Deactivating group", activeGroup)
     }
 
+    console.log("mANDO", QWIKZGROUP_ID)
+
     return (
 
         <div className="px-4 mt-3 grid xl:grid-cols-3 items-start gap-4">

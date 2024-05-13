@@ -23,7 +23,7 @@ import { QuizzList } from "@/components/ui/quizz-list";
 export const ActiveGroupView = () => {
 
     const { activeGroup } = useSelector(state => state.teachers);
-    const { ACCESS_TOKEN, GROUP_CODE, GROUP_NAME, QUIZZES } = activeGroup;
+    const { ACCESS_TOKEN, GROUP_CODE, GROUP_NAME, QUIZZES, QWIKZGROUP_ID } = activeGroup;
     const { STUDENTS } = activeGroup;
 
     // Verificar si hay estudiantes
@@ -116,7 +116,7 @@ export const ActiveGroupView = () => {
                                                 <DialogDescription>
                                                     A continuación se muestra la lista de cuestionarios creados para este grupo.
                                                 </DialogDescription>
-                                                <QuizzList quizzes={QUIZZES} /> {/* Mostrar lista de estudiantes */}
+                                                <QuizzList quizzes={QUIZZES} qwikzgroupId={QWIKZGROUP_ID} /> {/* Mostrar lista de estudiantes */}
                                             </DialogHeader>
                                         </DialogContent>
                                     </Dialog>
