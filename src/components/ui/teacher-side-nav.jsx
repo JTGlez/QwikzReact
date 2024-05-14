@@ -38,7 +38,7 @@ export default function TeacherSideNav() {
         dispatch(startLogout());
     }
 
-    const onQuizSubmitted = (questions) => {
+    const onQuizSubmitting = questions => {
         console.log("Esto recibo", questions)
         dispatch(startCreatingQuiz(questions));
         setQuizDialogOpen(false);
@@ -101,7 +101,7 @@ export default function TeacherSideNav() {
                             <DialogDescription>
                                 A continuación puede crear un nuevo cuestionario
                             </DialogDescription>
-                            <AddQuiz onQuizSubmitted={onQuizSubmitted}/>
+                            <AddQuiz onQuizSubmitting={onQuizSubmitting}/>
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>

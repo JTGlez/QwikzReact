@@ -35,12 +35,10 @@ const generateQuizCode = (name) => {
 
 export default function AddQuiz({
     onQuizSubmitting,
-    onQuizSubmitted,
 }) {
 
     const { questions, ...quizCreate } = useQuizCreate({
-        onQuizSubmitting,
-        onQuizSubmitted: (questions) => {
+        onQuizSubmitting: questions => {
             const quizCode = generateQuizCode(quizName);
             const quizData = {
                 QUIZZ_CODE: quizCode,
@@ -50,8 +48,8 @@ export default function AddQuiz({
                 QUESTIONS: questions,
                 QWIKZGROUP_ID: selectedGroupId
             };
-            onQuizSubmitted(quizData);
-        }
+            onQuizSubmitting(quizData);
+        },
     });
 
     const [quizName, setQuizName] = useState("");
