@@ -1,44 +1,55 @@
 /* eslint-disable no-unused-vars */
-
-import { useEffect, useLayoutEffect } from "react"
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { setQuestions } from "@/store/quizzes"
-import { questions as dummydata } from "@/assets/data"
-import { QuestionDisplay } from "./question"
+import { useParams } from "react-router-dom";
+import AnswerQuiz from "@/students/components/AnswerQuiz"
+import { startDummyQuizz } from "@/store/quizzes/thunks";
 
 export const QuizzPage = () => {
 
+    const { results, quiz } = useSelector(state => state.quizzes);
     const dispatch = useDispatch();
 
-    const { questions, currentQuestionIndex } = useSelector(state => state.quizzes);
+    const { quizID } = useParams();
 
-    useLayoutEffect(() => {
-        // Aquí es donde despachamos la acción para actualizar el estado con las preguntas
-        dispatch(setQuestions(dummydata));
-    }, [dispatch]);
+    useEffect(() => {
+        const getQuiz = async () => {
+            await dispatch(startDummyQuizz(quizID, null /* group */ ));
+        }
+        getQuiz();
+    }, [quizID]);
 
-    console.log("Mis questions: ", questions)
-
-    if (questions.length > 0) {
-        return (
-            <div
-                className='container flex flex-col items-center justify-center gap-10'
-                style={{ height: 'calc(100vh - 5rem)' }}
-            >
-                <QuestionDisplay />
-            </div>
-        )
-
+    if (quiz === null) {
+        return <div className='col-span-3 flex flex-col items-center text-center m-20'>
+            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl"> 
+                Loading Quiz...
+            </h1>
+        </div>
     }
 
-
-    return (
-        <div
-            className='container flex flex-col items-center justify-center gap-10'
-            style={{ height: 'calc(100vh - 5rem)' }}
-        >
-            hola
-
+    if (results !== null) {
+        return <div className='col-span-3 flex flex-col items-center text-center m-20'>
+            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                You got a <span className='text-primary'>{results}</span>.
+                Thanks for taking this quiz {":)"}
+            </h1>
         </div>
-    )
+    }
+
+    // submit quiz to api
+    const onQuizSubmitting = quiz => {
+        console.log(quiz);
+    }
+
+    return <main className='flex-1 flex m-16'>
+        <div className='container m-auto'>
+            <div className='col-span-3 flex flex-col items-center text-center'>
+                <AnswerQuiz 
+                    quiz={quiz}
+                    onQuizSubmitting={onQuizSubmitting}
+                />
+            </div>
+        </div>
+    </main>
+
 }
