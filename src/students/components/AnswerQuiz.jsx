@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import useQuizAnswer from "../hooks/useQuizAnswer";
+import useQuizAnswer from "@/hooks/useQuizAnswer";
 
 export default function AnswerQuiz({
     quiz,
@@ -50,7 +52,7 @@ export default function AnswerQuiz({
         <div className="flex flex-col gap-8 justify-center items-center">
             <div className='flex justify-center items-center flex-col gap-1'>
                 <span className='text-xl font-bold'>
-                    {quizAnswer.quizTimeLeft} seconds left 
+                    {quizAnswer.quizTimeLeft} seconds left
                 </span>
                 <span className='text-xl font-bold'>
                     {questionInSightIndex + 1} / {questions.length}
@@ -58,7 +60,7 @@ export default function AnswerQuiz({
                 <p className="text-center">{question.question}</p>
             </div>
 
-            {question.imageURL && <img src={question.imageURL} style={{height: 150}}/>}
+            {question.imageURL && <img src={question.imageURL} style={{ height: 150 }} />}
         </div>
 
         <div className='grid grid-cols-2 gap-5'>
@@ -80,13 +82,13 @@ export default function AnswerQuiz({
             >
                 ⬅️
             </Button>
-            <Button 
+            <Button
                 disabled={questionInSightIndex === questions.length - 1}
                 onClick={onMoveToNextQuestion}
-            > 
+            >
                 ➡️
             </Button >
-            <Button 
+            <Button
                 onClick={quizAnswer.onQuizSubmit}
             >
                 Submit

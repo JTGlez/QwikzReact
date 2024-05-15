@@ -15,7 +15,6 @@ import { CheckCheckIcon } from "lucide-react";
 import { startQuizz, queryQuizzResults } from "@/store/quizzes/thunks";
 import {
     Drawer,
-    DrawerTrigger,
     DrawerContent,
     DrawerHeader,
     DrawerTitle,

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setResults } from "@/store/quizzes";
