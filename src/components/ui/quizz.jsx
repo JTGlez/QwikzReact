@@ -1,55 +1,76 @@
 /* eslint-disable no-unused-vars */
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AnswerQuiz from "@/students/components/AnswerQuiz"
-import { startDummyQuizz } from "@/store/quizzes/thunks";
+import { startQuizz, submitQuizz } from "@/store/quizzes/thunks";
+import { Button } from "@/components/ui/button";
+import { setQuiz, setResults } from "@/store/quizzes";
 
 export const QuizzPage = () => {
 
     const { results, quiz } = useSelector(state => state.quizzes);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { quizID, qwikzgroupId } = useParams();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const { quizID } = useParams();
 
     useEffect(() => {
         const getQuiz = async () => {
-            await dispatch(startDummyQuizz(quizID, null /* group */ ));
+            console.log("Llamando a la API para hacer refresh del Quizz")
+            await dispatch(startQuizz(quizID, qwikzgroupId));
         }
         getQuiz();
-    }, [quizID]);
+    }, [quizID, qwikzgroupId]);
 
     if (quiz === null) {
         return <div className='col-span-3 flex flex-col items-center text-center m-20'>
-            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl"> 
+            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                 Loading Quiz...
             </h1>
         </div>
     }
 
     if (results !== null) {
-        return <div className='col-span-3 flex flex-col items-center text-center m-20'>
-            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-                You got a <span className='text-primary'>{results}</span>.
-                Thanks for taking this quiz {":)"}
-            </h1>
-        </div>
+        return (
+            <div className='col-span-3 flex flex-col items-center text-center m-20'>
+                <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                    You got a <span className='text-primary'>{results}</span>.
+                    Thanks for taking this quiz {":)"}
+                </h1>
+                <Button className='mt-8' onClick={() => {
+                    dispatch(setQuiz(null));
+                    dispatch(setResults(null));
+                    navigate('/');
+                }}>Go to Home</Button>
+            </div>
+        );
     }
 
+    const { QUIZZ_APPLICATION_ID } = quiz;
+
     // submit quiz to api
-    const onQuizSubmitting = quiz => {
-        console.log(quiz);
+    const onQuizSubmitting = async (quiz) => {
+
+        const data = {
+            QUIZZ_APPLICATION_ID: QUIZZ_APPLICATION_ID,
+            ...quiz
+        }
+        const success = await dispatch(submitQuizz(data));
+        if (success) {
+            console.log("Quiz submitted successfully");
+        }
     }
 
     return <main className='flex-1 flex m-16'>
         <div className='container m-auto'>
             <div className='col-span-3 flex flex-col items-center text-center'>
-                <AnswerQuiz 
+                <AnswerQuiz
                     quiz={quiz}
                     onQuizSubmitting={onQuizSubmitting}
                 />
             </div>
         </div>
     </main>
-
 }

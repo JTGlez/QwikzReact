@@ -19,6 +19,9 @@ export const quizzesSlice = createSlice({
         },
         setResults: (state, action) => {
             state.results = action.payload;
+        },
+        setErrorMessage: (state, action) => {
+            state.errorMessage = action.payload;
         }
     }
 });
@@ -27,4 +30,5 @@ export const {
     sendingQuizzAnswers, 
     setQuiz,
     setResults,
+    setErrorMessage
 } = quizzesSlice.actions;
