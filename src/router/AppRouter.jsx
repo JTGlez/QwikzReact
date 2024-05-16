@@ -9,10 +9,7 @@ import { GlobalLayout } from "@/layout/GlobalLayout";
 import { Toaster } from "@/components/ui/toaster";
 
 export const AppRouter = () => {
-  const { verificationDone } = useCheckAuth();
-
-  const status = "authenticated";
-  const accountType = "teacher";
+  const { status, accountType, verificationDone } = useCheckAuth();
 
   if (!verificationDone) {
     return (
