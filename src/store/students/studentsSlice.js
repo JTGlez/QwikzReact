@@ -8,15 +8,24 @@ export const studentsSlice = createSlice({
         activeGroup: null,
         messageSaved: '',
         errorMessage: '',
+        isLeavingGroup: false
     },
     reducers: {
         joiningNewGroup: (state) => {
             state.isJoiningGroup = true;
         },
+        leavingNewGroup: (state) => {
+            state.isLeavingGroup = true;
+        },
         joinNewGroup: (state, action) => {
             state.groups.push(action.payload);
             state.isJoiningGroup = false;
             state.messageSaved = `${action.payload.GROUP_CODE} joined successfully!`;
+        },
+        leaveNewGroup: (state, action) => {
+            state.groups = state.groups.filter(group => group.QWIKZGROUP_ID !== action.payload);
+            state.isLeavingGroup = false;
+            state.messageSaved = `Group left successfully!`;
         },
         setActiveGroup: (state, action) => {
             state.activeGroup = action.payload;
@@ -56,7 +65,9 @@ export const studentsSlice = createSlice({
 // Action creators
 export const { 
     joiningNewGroup, 
+    leavingNewGroup,
     joinNewGroup, 
+    leaveNewGroup,
     setActiveGroup, 
     setGroups, 
     updateGroup, 

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +18,15 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import { StudentList } from "@/components/ui/student-list";
-import { Quizzlist } from "@/components/ui/quizzlist";
 import { Trash } from "lucide-react";
 import { QuizzList } from "@/components/ui/quizz-list";
+import { startDeactivatingGroup } from "@/store/students/thunks";
 
 export const ActiveStudentGroupView = () => {
 
     const { activeGroup } = useSelector(state => state.students);
+    const dispatch = useDispatch();
+
     const { STUDENTS, QUIZZES, QWIKZGROUP_ID } = activeGroup;
 
     // Verificar si hay estudiantes
@@ -40,11 +42,9 @@ export const ActiveStudentGroupView = () => {
     const { GROUP_CODE, GROUP_NAME } = activeGroup;
 
     const onDeactivateGroup = () => {
-        console.log("Deactivating group", activeGroup)
+        dispatch(startDeactivatingGroup(QWIKZGROUP_ID));
     }
-
-    console.log("mANDO", QWIKZGROUP_ID)
-
+    
     return (
 
         <div className="px-4 mt-3 grid xl:grid-cols-3 items-start gap-4">

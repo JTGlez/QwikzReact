@@ -136,7 +136,7 @@ export const QuizzList = ({ quizzes, qwikzgroupId }) => {
                                     <TableRow key={result.QUIZZ_APPLICATION_ID}>
                                         <TableCell>{result.DISPLAY_NAME}</TableCell>
                                         <TableCell>{result.EMAIL}</TableCell>
-                                        <TableCell>{result.RESULTS ? result.RESULTS : 'Sin Calificación'}</TableCell>
+                                        <TableCell>{(result.RESULTS === 0 || !isNaN(result.RESULTS)) ? result.RESULTS : 'Sin Calificación'}</TableCell>
                                         <TableCell>{result.IS_COMPLETED ? "Si" : "No"}</TableCell>
                                         <TableCell>{result.RETRY_NUMBER}</TableCell>
 
