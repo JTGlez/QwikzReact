@@ -5,6 +5,7 @@ export const teachersSlice = createSlice({
     initialState: {
         isSavingGroup: false,
         isSavingQuiz: false,
+        isDeletingQuizz: false,
         groups: [],
         activeGroup: null,
         messageSaved: '',
@@ -68,7 +69,34 @@ export const teachersSlice = createSlice({
             state.activeGroup = null;
             state.messageSaved = '';
             state.errorMessage = '';
+        },
+        isDeletingQuizz: (state) => {
+            state.isDeletingQuizz = true;
+        },
+        deleteQuizz: (state, action) => {
+            const quizzId = action.payload;
+        
+            // Actualizar el activeGroup
+            if (state.activeGroup) {
+                state.activeGroup.QUIZZES = state.activeGroup.QUIZZES.filter(quizz => quizz.QUIZZ_ID !== quizzId);
+            }
+        
+            // Actualizar el grupo correspondiente en groups
+            state.groups = state.groups.map(group => {
+                if (group.QWIKZGROUP_ID === state.activeGroup.QWIKZGROUP_ID) {
+                    return {
+                        ...group,
+                        QUIZZES: group.QUIZZES.filter(quizz => quizz.QUIZZ_ID !== quizzId)
+                    };
+                }
+                return group;
+            });
+        
+            state.isDeletingQuizz = false;
+            state.messageSaved = `Quizz ${quizzId} eliminado de forma exitosa!`;
         }
+        
+        
     }
 });
 // Action creators
@@ -84,4 +112,6 @@ export const {
     clearMessageSaved,
     clearErrorMessage, 
     cleanTeacherGroups,
-    cleanActiveGroup } = teachersSlice.actions;
+    cleanActiveGroup,
+    isDeletingQuizz,
+    deleteQuizz } = teachersSlice.actions;

@@ -13,7 +13,7 @@ import {
 import { Button } from "./button";
 import { CheckCircle2Icon, Trash } from "lucide-react";
 import { CheckCheckIcon } from "lucide-react";
-import { startQuizz, queryQuizzResults } from "@/store/quizzes/thunks";
+import { startQuizz, queryQuizzResults, startDeletingQuizz } from "@/store/quizzes/thunks";
 import {
     Drawer,
     DrawerContent,
@@ -37,7 +37,8 @@ export const QuizzList = ({ quizzes, qwikzgroupId }) => {
     // Función para manejar la eliminación de un cuestionario
     const handleDeleteQuizz = (quizzId) => {
         console.log(`Eliminar cuestionario con ID: ${quizzId}`);
-        // Aquí podrías agregar la lógica para eliminar el cuestionario
+        
+        dispatch(startDeletingQuizz(quizzId));
     };
 
     // Función para manejar el inicio de un cuestionario

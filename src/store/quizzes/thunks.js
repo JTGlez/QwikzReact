@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { api } from "../../api";
 import { getCurrentUserToken } from "../../firebase/providers";
+import { deleteQuizz, isDeletingQuizz, setActiveGroup } from "../teachers";
 import { setQuiz, sendingQuizzAnswers, setErrorMessage } from "./quizzesSlice";
 
 export const startQuizz = (quizzId, qwikzgroupId) => {
@@ -153,3 +154,36 @@ export const submitQuizz = (quizz) => {
         }
     };
 };
+
+export const startDeletingQuizz = (quizzId) => {
+
+    return async (dispatch) => {
+
+        try {
+
+            dispatch(isDeletingQuizz())
+
+            // Retrieves the current user's token to send it to the Flask backend and verify the user's identity
+            const token = await getCurrentUserToken();
+
+            const resp = await api.post('/quizz/delete', {
+                quizzId
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token.token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log("Respuesta de la API", resp.data)
+
+            dispatch(deleteQuizz(quizzId));
+            dispatch(setActiveGroup(null));
+
+            return resp.data;
+
+        } catch (error) {
+            return dispatch(setErrorMessage(error.message));
+        }
+    }
+}
