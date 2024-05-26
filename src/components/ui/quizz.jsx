@@ -1,44 +1,76 @@
 /* eslint-disable no-unused-vars */
-
-import { useEffect, useLayoutEffect } from "react"
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { setQuestions } from "@/store/quizzes"
-import { questions as dummydata } from "@/assets/data"
-import { QuestionDisplay } from "./question"
+import { useParams, useNavigate } from "react-router-dom";
+import AnswerQuiz from "@/students/components/AnswerQuiz"
+import { startQuizz, submitQuizz } from "@/store/quizzes/thunks";
+import { Button } from "@/components/ui/button";
+import { setQuiz, setResults } from "@/store/quizzes";
 
 export const QuizzPage = () => {
 
+    const { results, quiz } = useSelector(state => state.quizzes);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { quizID, qwikzgroupId } = useParams();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const { questions, currentQuestionIndex } = useSelector(state => state.quizzes);
 
-    useLayoutEffect(() => {
-        // Aquí es donde despachamos la acción para actualizar el estado con las preguntas
-        dispatch(setQuestions(dummydata));
-    }, [dispatch]);
+    useEffect(() => {
+        const getQuiz = async () => {
+            console.log("Llamando a la API para hacer refresh del Quizz")
+            await dispatch(startQuizz(quizID, qwikzgroupId));
+        }
+        getQuiz();
+    }, [quizID, qwikzgroupId]);
 
-    console.log("Mis questions: ", questions)
-
-    if (questions.length > 0) {
-        return (
-            <div
-                className='container flex flex-col items-center justify-center gap-10'
-                style={{ height: 'calc(100vh - 5rem)' }}
-            >
-                <QuestionDisplay />
-            </div>
-        )
-
+    if (quiz === null) {
+        return <div className='col-span-3 flex flex-col items-center text-center m-20'>
+            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                Loading Quiz...
+            </h1>
+        </div>
     }
 
+    if (results !== null) {
+        return (
+            <div className='col-span-3 flex flex-col items-center text-center m-20'>
+                <h1 className="scroll-m-20 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+                    You got a <span className='text-primary'>{results}</span>.
+                    Thanks for taking this quiz {":)"}
+                </h1>
+                <Button className='mt-8' onClick={() => {
+                    dispatch(setQuiz(null));
+                    dispatch(setResults(null));
+                    navigate('/');
+                }}>Go to Home</Button>
+            </div>
+        );
+    }
 
-    return (
-        <div
-            className='container flex flex-col items-center justify-center gap-10'
-            style={{ height: 'calc(100vh - 5rem)' }}
-        >
-            hola
+    const { QUIZZ_APPLICATION_ID } = quiz;
 
+    // submit quiz to api
+    const onQuizSubmitting = async (quiz) => {
+
+        const data = {
+            QUIZZ_APPLICATION_ID: QUIZZ_APPLICATION_ID,
+            ...quiz
+        }
+        const success = await dispatch(submitQuizz(data));
+        if (success) {
+            console.log("Quiz submitted successfully");
+        }
+    }
+
+    return <main className='flex-1 flex m-16'>
+        <div className='container m-auto'>
+            <div className='col-span-3 flex flex-col items-center text-center'>
+                <AnswerQuiz
+                    quiz={quiz}
+                    onQuizSubmitting={onQuizSubmitting}
+                />
+            </div>
         </div>
-    )
+    </main>
 }

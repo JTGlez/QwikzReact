@@ -9,51 +9,45 @@ import { startLoadingGroups } from "../store/teachers/thunks";
 import { startLoadingStudentGroups } from "../store/students/thunks";
 
 export const useCheckAuth = () => {
+  // Verification starts by default in false, as we are about to start checking
+  const [verificationDone, setVerificationDone] = useState(false);
+  const { status, accountType } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-    // Verification starts by default in false, as we are about to start checking
-    const [verificationDone, setVerificationDone] = useState(false);
-    const { status, accountType } = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+  // Checks the current user from Firebase every time the app is loaded
+  useEffect(() => {
+    // Subscription to the user status: observable with returning values
+    onAuthStateChanged(firebaseAuth, async (user) => {
+      dispatch(checkingCredentials());
+      // If no user is active, then cleans the auth state
+      if (!user) {
+        setVerificationDone(true);
+        return dispatch(logout({}));
+      }
 
-    // Checks the current user from Firebase every time the app is loaded
-    useEffect(() => {
+      // If we have an user, call the login action
+      const { uid, email, displayName, photoURL } = user;
 
-        // Subscription to the user status: observable with returning values
-        onAuthStateChanged(firebaseAuth, async (user) => {
+      // Get the custom claims after reloading user info
+      const { claims } = await getIdTokenResult(firebaseAuth.currentUser, true);
+      const accountType = claims.accountType;
+      dispatch(login({ uid, email, displayName, photoURL, accountType }));
 
-            dispatch(checkingCredentials());
-            // If no user is active, then cleans the auth state
-            if (!user) {
-                setVerificationDone(true);
-                return dispatch(logout({}))
-            }
+      // Then, do something!
+      if (accountType === "teacher") {
+        dispatch(startLoadingGroups());
+      } else if (accountType === "student") {
+        dispatch(startLoadingStudentGroups());
+      }
 
-            // If we have an user, call the login action
-            const { uid, email, displayName, photoURL } = user;
+      // After checking, we can go to the router
+      setVerificationDone(true);
+    });
+  }, []);
 
-            // Get the custom claims after reloading user info
-            const { claims } = await getIdTokenResult(firebaseAuth.currentUser, true)
-            const accountType = claims.accountType;
-            dispatch(login({ uid, email, displayName, photoURL, accountType }));
-
-            // Then, do something!
-            if (accountType === 'teacher') {
-                dispatch(startLoadingGroups());
-            }
-
-            else if (accountType === 'student') {
-                dispatch(startLoadingStudentGroups());
-            }
-
-            // After checking, we can go to the router
-            setVerificationDone(true);
-        });
-
-    }, []);
-
-    return {
-        verificationDone,
-        status,
-        accountType
-    }
-}
+  return {
+    verificationDone,
+    status,
+    accountType,
+  };
+};

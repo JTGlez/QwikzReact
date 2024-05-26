@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
     Table,
     TableBody,
@@ -15,7 +16,6 @@ import { CheckCheckIcon } from "lucide-react";
 import { startQuizz, queryQuizzResults } from "@/store/quizzes/thunks";
 import {
     Drawer,
-    DrawerTrigger,
     DrawerContent,
     DrawerHeader,
     DrawerTitle,
@@ -27,6 +27,7 @@ import {
 export const QuizzList = ({ quizzes, qwikzgroupId }) => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { accountType } = useSelector(state => state.auth);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [quizzResults, setQuizzResults] = useState([]);
@@ -40,9 +41,12 @@ export const QuizzList = ({ quizzes, qwikzgroupId }) => {
     };
 
     // Función para manejar el inicio de un cuestionario
-    const handleStartQuizz = (quizzId) => {
+    const handleStartQuizz = async(quizzId) => {
         console.log(`Iniciar cuestionario con ID: ${quizzId}`);
-        dispatch(startQuizz(quizzId, qwikzgroupId));
+        const quiz = await dispatch(startQuizz(quizzId, qwikzgroupId));
+        if (quiz) {
+            navigate(`/quiz/${quiz.QUIZZ_ID}/group/${quiz.QWIKZGROUP_ID}`);
+        }
     };
 
     const handleQueryResults = async (quizzId) => {

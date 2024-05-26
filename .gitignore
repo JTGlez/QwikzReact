@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+.env.production
+
+# lock files
+yarn.lock
+package-lock.json

@@ -3,24 +3,22 @@ import fileUpload from "@/helpers/fileUpload";
 import insertAt from "@/helpers/insertAt";
 import removeAt from "@/helpers/removeAt";
 
-const defaultQuestion = {
+const getDefaultQuestion = () => ({
     question: "", 
     answers: ["", "", "", ""],
     correctAnswer: 0,
     file: null,
     imageURL: "",
-}
+});
 
 const useQuizCreate = ({
-    onQuizSubmitting = () => {},
-    onQuizSubmitted = () => {},
+    onQuizSubmitting = quiz => {},
 }) => {
 
-    const [questions, setQuestions] = useState([defaultQuestion]);
+    const [questions, setQuestions] = useState([getDefaultQuestion()]);
     
     const [quizImagesUploading, setQuizImagesUploading] = useState(false);
     const [quizSubmitting, setQuizSubmitting] = useState(false);
-    const [quizSubmitted, setQuizSubmitted] = useState(false);
 
     const onQuestionChange = index => event => {
         const question = {...questions[index], question: event.target.value};
@@ -48,7 +46,7 @@ const useQuizCreate = ({
     }
 
     const onQuestionAdd = event => {
-        const question = {...defaultQuestion};
+        const question = getDefaultQuestion();
         setQuestions(insertAt(questions, questions.length, question));
     }
 
@@ -61,7 +59,6 @@ const useQuizCreate = ({
 
     const onQuizSubmit = event => {
         setQuizImagesUploading(true);
-        setQuizSubmitted(false);
     }
 
     useEffect(() => {
@@ -92,20 +89,7 @@ const useQuizCreate = ({
         });
         setQuizSubmitting(false);
         onQuizSubmitting(quiz);
-
-        console.log(quiz);
-        setQuizSubmitted(true);
     }, [quizSubmitting]);
-
-    useEffect(() => {
-        if (!quizSubmitted) {
-            return;
-        }
-
-        // Execute the callback function
-        onQuizSubmitted(questions);
-        setQuizSubmitted(false);
-    }, [quizSubmitted]);
 
     const handlers = {
         onQuizSubmit: onQuizSubmit,
@@ -121,8 +105,6 @@ const useQuizCreate = ({
         questions: questions,
         quizSubmitting: quizSubmitting,
         quizImagesUploading: quizImagesUploading,
-        quizSubmitted: quizSubmitted,
-        setQuizSubmitted: setQuizSubmitted,
     }
 
     const bag = {

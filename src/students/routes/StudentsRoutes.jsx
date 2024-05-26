@@ -7,7 +7,7 @@ export const StudentsRoutes = () => {
         <Routes>
             <Route path="/" element={<StudentsPage />} />
             <Route path="*" element={<Navigate to="/" />} />
-            <Route path="quizz" element={<QuizzPage />} />
+            <Route path="quiz/:quizID/group/:qwikzgroupId" element={<QuizzPage />} />
         </Routes>
     )
 }
