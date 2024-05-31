@@ -13,9 +13,6 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Copy the .env.production file
-COPY .env.production .env.production
-
 # Build the React app
 RUN npm run build
 
@@ -25,8 +22,14 @@ FROM nginx:alpine
 # Copy built React app from the build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 3000
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /entrypoint.sh
+
+# Expose port 80
 EXPOSE 80
 
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx server with the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]

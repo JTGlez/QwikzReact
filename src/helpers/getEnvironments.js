@@ -1,8 +1,5 @@
+// src/helpers/getEnvironments.js
 export const getEnvironments = () => {
-
-    import.meta.env;
-
-    return {
-        ...import.meta.env
-    }
-}
+    return window._env_;
+  }
+  
